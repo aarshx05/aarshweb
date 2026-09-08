@@ -1,0 +1,631 @@
+{
+  "seo": {
+    "title": "Aarsh Chaurasia | AI Security Engineer & Researcher",
+    "description": "Aarsh Chaurasia, Security Engineer and AI Security Researcher. Founding Security Engineer Intern at Vaatun, previously Security Assurance Intern at Microsoft (Azure DevSec) and Product Security at we45. Founder of Okynus Tech, incubated at C3iHub, IIT Kanpur.",
+    "keywords": "Aarsh Chaurasia, AI Security Engineer, Agentic AI Security, MCP Security, AI Red Teaming, LLM Security, Cybersecurity Researcher, DevSecOps, Application Security, Microsoft, Vaatun, we45, Okynus Tech, Portfolio",
+    "ogImage": "/aarsh.jpg"
+  },
+  "hero": {
+    "name": "Aarsh Chaurasia",
+    "image": "/Aarsh_Pro_New.jpeg",
+    "eyebrow": "Security Engineer · AI Security Researcher · Founder",
+    "subtitle": "AI security and AI for security. I red team agentic systems and MCP servers, then build the AI driven tooling that finds those failures at scale. Right now that means sovereign AI infrastructure and agentic security scanners at Vaatun, after an AI driven security testing platform for internal MCP servers at Microsoft and a security venture I founded out of IIT Kanpur's C3iHub.",
+    "stats": [
+      {
+        "num": "Founder Fellow",
+        "label": "C3iHub, IIT Kanpur"
+      },
+      {
+        "num": "Research Fellow",
+        "label": "Florida International University"
+      }
+    ],
+    "cardBadges": [
+      {
+        "dot": "#22c55e",
+        "title": "Vaatun · Founding Security Engineer Intern",
+        "sub": "Aug 2026 – Present",
+        "tag": "Now"
+      },
+      {
+        "dot": "#06b6d4",
+        "title": "Microsoft · Security Assurance Intern",
+        "sub": "Azure DevSec Team · 2026",
+        "tag": null
+      },
+      {
+        "dot": "#6366f1",
+        "title": "NFSU · B.Tech-M.Tech CS (Cybersecurity)",
+        "sub": "CGPA 9.30 / 10",
+        "tag": null
+      }
+    ]
+  },
+  "about": {
+    "image": "/Aarsh_Pro_New.jpeg",
+    "tags": [
+      "Security Engineer",
+      "AI Security",
+      "Founder"
+    ],
+    "tagColors": [
+      "accent",
+      "primary",
+      "green"
+    ],
+    "heading": "Practitioner. Researcher. Founder.",
+    "bio": [
+      "Security engineer working at the point where AI systems meet real attack surface. I build the tooling that finds how agentic systems, MCP servers and AI driven pipelines fail, and the infrastructure that keeps them from failing. Currently pursuing an integrated B.Tech-M.Tech in Computer Science with Cyber Security at National Forensic Sciences University (CGPA 9.30/10).",
+      "At <strong>Vaatun</strong> I architect sovereign AI inference across multi cloud infrastructure and build agentic AI security scanners for production workflows. Previously at <strong>Microsoft</strong>, I built an AI driven security testing platform for internal MCP servers with the Azure DevSec Team, surfacing <strong>validated vulnerabilities</strong> across authorization, unsafe tool exposure and capability escalation paths.",
+      "Before that, product security at <strong>we45</strong> for enterprise SaaS platforms, and founder of <strong>Okynus Tech</strong>, an enterprise security venture incubated at <strong>C3iHub, IIT Kanpur</strong>, taken from validation to a ~$500K valuation."
+    ],
+    "highlights": [
+      {
+        "label": "University",
+        "value": "National Forensic Sciences University · CGPA 9.30/10"
+      },
+      {
+        "label": "Programme",
+        "value": "B.Tech-M.Tech · CS (Cyber Security), 2022–2027"
+      },
+      {
+        "label": "Currently",
+        "value": "Founding Security Engineer Intern · Vaatun"
+      },
+      {
+        "label": "Previously",
+        "value": "Microsoft · we45 · Okynus Tech (Founder)"
+      }
+    ],
+    "quote": "Cybersecurity isn't just about reacting it's about building ahead of the threat."
+  },
+  "experience": [
+    {
+      "company": "Vaatun",
+      "role": "Founding Security Engineer Intern",
+      "period": "Aug 2026 – Present",
+      "icon": "V",
+      "image": "/logos/vaatun.png",
+      "description": "Building sovereign AI infrastructure and agentic security tooling for production AI workloads.\n\nKey contributions\n\n• Architected sovereign AI inference across multi cloud infrastructure, migrating workloads from third party model APIs to controlled infrastructure to strengthen data security and privacy\n\n• Built agentic AI security scanners and automated security pipelines, strengthening security controls across production AI workflows and reducing security and operational risk\n\n• Optimized cloud infrastructure and agentic AI workflows, improving uptime while reducing costs by ~30%",
+      "tags": [
+        "Sovereign AI",
+        "Agentic AI Security",
+        "Cloud Infrastructure",
+        "Security Automation"
+      ],
+      "highlight": true,
+      "id": "vaatun",
+      "logoPlate": false
+    },
+    {
+      "company": "Microsoft",
+      "role": "Security Assurance Intern",
+      "period": "May 2026 – Jul 2026",
+      "icon": "M",
+      "image": "/logos/microsoft.png",
+      "description": "Built AI driven security testing infrastructure for internal Microsoft MCP servers with the Azure DevSec Team.\n\nKey contributions\n\n• Built an AI driven security testing platform for internal Microsoft MCP servers using advanced static analysis and agentic AI dynamic analysis to identify security weaknesses at scale for the Azure DevSec Team\n\n• The platform identified and validated vulnerabilities across internal MCP ecosystems including authorization flaws, unsafe tool exposure and capability escalation paths through automated hybrid security analysis\n\n• Developed distributed orchestration pipelines to simulate multi step agent interactions and runtime execution flows for large scale security testing of enterprise AI infrastructure",
+      "tags": [
+        "MCP Security",
+        "AI Red Teaming",
+        "Static & Dynamic Analysis",
+        "Agent Orchestration"
+      ],
+      "highlight": true,
+      "id": "microsoft",
+      "logoPlate": false
+    },
+    {
+      "company": "we45",
+      "role": "Product Security Intern",
+      "period": "Jul 2025 – Mar 2026",
+      "icon": "W",
+      "image": "/logos/we45.png",
+      "description": "Product security and DevSecOps for enterprise SaaS platforms.\n\nKey contributions\n\n• Designed and implemented DevSecOps CI/CD security pipelines for large scale enterprise SaaS platforms using GitHub Actions with SAST, DAST, dependency and secret scanning\n\n• Triaged and analyzed 300+ security alerts, vulnerability findings and scan results across CI/CD pipelines and production systems achieving time to triage under 24 hours and prioritizing exploitable vulnerabilities\n\n• Performed web and API security testing for an enterprise communications platform aligned with the OWASP Top 10, identifying authorization, access control, data exposure and business logic flaws\n\n• Served as a bug bounty triager for an enterprise software vendor, validating submissions through manual security analysis and controlled testing, reviewing 100+ reports and contributing to signal validation and monitoring workflows",
+      "tags": [
+        "DevSecOps",
+        "CI/CD Security",
+        "API Security",
+        "Bug Bounty Triage"
+      ],
+      "highlight": false,
+      "id": "we45",
+      "logoPlate": true
+    },
+    {
+      "company": "Okynus Tech",
+      "role": "Founder",
+      "period": "Apr 2024 – Jun 2025",
+      "icon": "O",
+      "image": "/logos/okynus.png",
+      "description": "Founded and led an enterprise security venture incubated under IIT Kanpur's C3iHub.\n\nWhat I did\n\n• Architected a patent grade encryption algorithm and data protection mechanisms for OkSentinel, a proprietary secure data sharing platform leveraging novel algorithms to protect sensitive enterprise data\n\n• Built an agentic AI retesting system for OkNexus to automatically revalidate security findings within CI/CD pipelines, reducing manual triage effort by ~70% and accelerating verification turnaround\n\n• Led technical validation and security architecture across application security, cloud security and threat modelling, taking Okynus from product validation to a ~$500K valuation through IIT Kanpur C3iHub and SSIP 2.0",
+      "tags": [
+        "Applied Cryptography",
+        "Agentic AI",
+        "Security Architecture",
+        "Founder"
+      ],
+      "highlight": false,
+      "id": "okynus",
+      "logoPlate": false
+    },
+    {
+      "company": "SecureDApp",
+      "role": "Security Engineer Intern",
+      "period": "May 2025 – Jul 2025",
+      "icon": "S",
+      "image": "/logos/securedapp.png",
+      "description": "Worked on penetration testing and security auditing for application platforms and internal security tooling.\n\nWhat I did\n\n• Performed penetration testing on web applications identifying vulnerabilities in authentication flows access control mechanisms and application logic\n\n• Conducted security assessments focusing on attack surface analysis misconfigurations and security weaknesses across application environments\n\n• Contributed to testing and evaluation of an AI driven firewall auditing platform designed to analyze security configurations and highlight potential defensive gaps",
+      "tags": [
+        "Penetration Testing",
+        "Application Security",
+        "Security Auditing"
+      ],
+      "highlight": false,
+      "id": "securedapp",
+      "logoPlate": true
+    },
+    {
+      "company": "Login2Xplore",
+      "role": "Backend Security & Development Intern",
+      "period": "Sep 2024 – Apr 2025",
+      "icon": "L",
+      "image": "/logos/login2xplore.png",
+      "description": "Worked on backend systems and internal developer tools focused on data infrastructure API development and secure data handling.\n\nWhat I did\n\n• Built a File Array Manager tool enabling secure upload preview and management of multiple file types through a token based API\n\n• Improved the XDSArray backend system to enhance scalability reliability and data handling performance\n\n• Developed the XDSArray API providing a modular interface for secure high performance data storage and retrieval with token based access control\n\n• Built a JPDB API Explorer tool for testing and debugging live API requests improving backend development workflows and secure API validation",
+      "tags": [
+        "Backend Engineering",
+        "Secure API Development",
+        "System Architecture"
+      ],
+      "highlight": false,
+      "id": "login2xplore",
+      "logoPlate": true
+    },
+    {
+      "company": "CM Office Gujarat",
+      "role": "Data Security Analyst Intern",
+      "period": "Nov 2024 – Dec 2024",
+      "icon": "G",
+      "image": "/logos/cmogujarat.png",
+      "description": "Worked on analyzing large scale government datasets to identify security anomalies and potential fraudulent activities.\n\nWhat I did\n\n• Analyzed large datasets to detect anomalies patterns and suspicious activity indicating potential fraud or misuse\n\n• Investigated irregular data patterns and helped identify cases of fraudulent activity within government program datasets\n\n• Supported data security efforts by improving monitoring approaches for identifying abnormal behavior across data systems",
+      "tags": [
+        "Data Security",
+        "Fraud Detection",
+        "Anomaly Detection",
+        "Data Analysis"
+      ],
+      "highlight": false,
+      "id": "cmoffice",
+      "logoPlate": true
+    },
+    {
+      "company": "Florida International University",
+      "role": "Summer Research Intern",
+      "period": "Jun 2024 – Sep 2024",
+      "icon": "F",
+      "image": "/logos/fiu.png",
+      "description": "Conducted research on challenges posed by modern encryption in mobile operating systems and their impact on digital forensic investigations.\n\nWhat I did\n\n• Co authored research on improving mobile device forensics using dynamic analysis AI assisted pattern detection and cloud based forensic techniques\n\n• Designed simulations to analyze encrypted systems and observe transient decrypted states during runtime\n\n• Used tools such as Frida and Xposed Framework to monitor application behavior and identify potential weaknesses in encrypted environments\n\n• Explored scalable forensic approaches using cloud based analysis for distributed data and key management systems",
+      "tags": [
+        "Mobile Forensics",
+        "Encryption Security",
+        "Dynamic Analysis",
+        "Security Research"
+      ],
+      "highlight": false,
+      "id": "fiu",
+      "logoPlate": false
+    },
+    {
+      "company": "Stealth Startup (Acquired)",
+      "role": "CTO / Technical Co-founder",
+      "period": "Feb 2022 – Apr 2025",
+      "icon": "S",
+      "image": "",
+      "description": "Built and led a technology driven startup focused on improving digital visibility and performance for online platforms.\n\nWhat I did\n\n• Played a key role in scaling the startup and improving client outcomes contributing to the company’s eventual acquisition\n\n• Led development and execution of SEO strategies that improved online visibility traffic growth and overall platform performance for clients\n\n• Designed a custom SEO optimization engine to automate analysis and optimization of website structures and search performance\n\n• Used data driven insights to continuously refine campaigns improve search rankings and support client growth objectives\n\n• Worked closely with product and engineering teams to integrate optimization tools and maintain efficient scalable workflows",
+      "tags": [
+        "Startup",
+        "CTO",
+        "Engineering Leadership"
+      ],
+      "highlight": false,
+      "id": "stealth",
+      "logoPlate": false
+    },
+    {
+      "company": "Google Developer Student Clubs (GDSC)",
+      "role": "Lead",
+      "period": "Jun 2023 – Jun 2024",
+      "icon": "G",
+      "image": "/logos/gdsc.png",
+      "description": "Led the university chapter of Google Developer Student Clubs fostering a community focused on learning building and collaboration in modern technologies.\n\nWhat I did\n\n• Successfully completed multiple GDSC campaigns driving strong student participation and engagement across the university\n\n• Organized and hosted technical workshops and events on Android development cloud computing and AI ML with large student attendance\n\n• Led hands on sessions hackathons and coding challenges helping students build practical technical skills\n\n• Collaborated with industry professionals and guest speakers to deliver technical sessions and mentorship opportunities\n\n• Managed and coordinated a team to plan events run community initiatives and expand overall club participation",
+      "tags": [
+        "Developer Communities",
+        "Technical Leadership",
+        "Event Organization",
+        "Community Building"
+      ],
+      "highlight": false,
+      "id": "gdsc",
+      "logoPlate": true
+    }
+  ],
+  "projects": [
+    {
+      "name": "EngineerSec",
+      "desc": "AI native platform that automates threat modeling, vulnerability discovery, remediation and CI/CD security. It turns architecture and code context into prioritized, exploitable findings and drives fixes straight through the pipeline.",
+      "tags": [
+        "AI Security",
+        "Threat Modeling",
+        "CI/CD Security",
+        "Automated Remediation"
+      ],
+      "github": "",
+      "link": "",
+      "featured": true,
+      "id": "engineersec"
+    },
+    {
+      "name": "Intelligent Storage Evidence Analyzer",
+      "desc": "Agentic AI powered forensic system that detects intentional disk wiping and identifies the tools used in data destruction. It analyzes disk images using entropy detection tool fingerprinting and behavioral intent modeling to support digital forensic investigations.",
+      "tags": [
+        "Agentic AI",
+        "Digital Forensics",
+        "Disk Analysis",
+        "Threat Investigation"
+      ],
+      "github": "https://github.com/aarshx05/ISEA",
+      "link": "",
+      "featured": true,
+      "id": "we45"
+    },
+    {
+      "name": "PayloadScope",
+      "desc": "Machine learning system that classifies malicious web exploitation payloads such as XSS SQL Injection SSTI and Command Injection using TF IDF character n gram vectorization with a Logistic Regression multi class classifier. The system normalizes encoded inputs before analysis and supports both a REST API for automated pipelines and a GUI for manual payload inspection.",
+      "tags": [
+        "Application Security",
+        "Machine Learning Security",
+        "Payload Analysis",
+        "Threat Detection"
+      ],
+      "github": "https://github.com/aarshx05/PayloadScope",
+      "link": "",
+      "featured": false,
+      "id": "okynus"
+    },
+    {
+      "name": "PhishSOC-AI",
+      "desc": "PhishSOC-AI is an advanced, AI driven phishing detection platform designed for Security Operations Centers (SOC). It automates phishing email analysis through multi layered inspection, combining NLP-based sentiment classification, threat intelligence enrichment, screenshot forensics, and real-time Splunk integration",
+      "tags": [
+        "AI Security",
+        "Phishing Detection",
+        "SOC Automation",
+        "Threat Intelligence"
+      ],
+      "github": "https://github.com/aarshx05/PhishSOC-Ai",
+      "link": "",
+      "featured": false,
+      "id": "securedapp"
+    },
+    {
+      "name": "SecuriForge",
+      "desc": "SecuriForge is a unified binary security and risk analysis framework that combines hardening checks, reverse engineering risk assessment, malware tampering detection, and SBOM generation into a single tool.",
+      "tags": [
+        "Binary Security",
+        "Malware Analysis",
+        "Reverse Engineering",
+        "SBOM Analysis"
+      ],
+      "github": "https://github.com/aarshx05/SecuriForge",
+      "link": "",
+      "featured": true,
+      "id": "login2xplore"
+    }
+  ],
+  "research": [
+    {
+      "title": "Navigating the Frontiers of Encryption in Mobile Forensics",
+      "date": "2023",
+      "subtitle": "Mobile forensics with hybrid AI and cloud computing",
+      "publishedIn": "Florida International University Journal",
+      "desc": "This paper explores advanced approaches to overcoming encryption challenges in mobile device forensics by leveraging AI algorithms alongside cloud computing resources.",
+      "link": "#"
+    },
+    {
+      "title": "Towards Behavioural Secure Authentication Using Keystroke Dynamics",
+      "date": "2025",
+      "subtitle": "Biometric authentication with ensemble machine learning classifiers",
+      "publishedIn": "Upcoming",
+      "desc": "Presents a keystroke dynamics-based authentication framework using ensemble classifiers (SVM, KNN, Random Forest), emphasizing accuracy improvements and dynamic thresholding to reduce false rejections.",
+      "link": "#"
+    },
+    {
+      "title": "Complex Resource Allocation and Energy Consumption in 5G and Modern Wireless Networks",
+      "date": "2025",
+      "subtitle": "Analyzing energy efficiency challenges in advanced wireless technologies",
+      "publishedIn": "Upcoming",
+      "desc": "Investigates the complexities of resource allocation in 5G and beyond networks, highlighting causes of higher energy consumption and proposing potential optimization strategies.",
+      "link": "#"
+    }
+  ],
+  "skills": [
+    {
+      "label": "Offensive Security",
+      "color": "primary",
+      "skills": [
+        "Application Security",
+        "Web and API Security",
+        "Vulnerability Assessment and Penetration Testing (VAPT)",
+        "Threat Modeling",
+        "Bug Bounty Triage",
+        "Secure Coding",
+        "OWASP Top 10",
+        "Burp Suite",
+        "OWASP ZAP",
+        "Nessus",
+        "Nmap"
+      ]
+    },
+    {
+      "label": "AI Security & AI for Security",
+      "color": "accent",
+      "skills": [
+        "AI Security",
+        "AI for Security",
+        "Agentic AI Security",
+        "AI Security Testing",
+        "MCP Security",
+        "AI Threat Modeling",
+        "AI Red Teaming",
+        "LLM Security",
+        "Agent Evaluations",
+        "Agent Orchestration",
+        "DevSecOps",
+        "CI/CD Security",
+        "Security Automation"
+      ]
+    },
+    {
+      "label": "Cloud & Infrastructure",
+      "color": "primary",
+      "skills": [
+        "AWS",
+        "Azure",
+        "Docker",
+        "Kubernetes",
+        "CI/CD",
+        "Cloud Security",
+        "Infrastructure Security",
+        "Cloud Automation"
+      ]
+    },
+    {
+      "label": "Observability & Incident Response",
+      "color": "green",
+      "skills": [
+        "SIEM",
+        "SOAR",
+        "Splunk",
+        "ELK Stack",
+        "Alert Triage",
+        "Detection Engineering",
+        "Incident Response"
+      ]
+    },
+    {
+      "label": "Programming & Automation",
+      "color": "primary",
+      "skills": [
+        "Python",
+        "Bash",
+        "JavaScript",
+        "REST APIs",
+        "YAML",
+        "Security Automation",
+        "Scripted Testing",
+        "API Fuzzing"
+      ]
+    },
+    {
+      "label": "Fundamentals",
+      "color": "accent",
+      "skills": [
+        "Operating Systems",
+        "Artificial Intelligence & Machine Learning (AI/ML)",
+        "Data Structures & Algorithms (DSA)"
+      ]
+    }
+  ],
+  "contact": {
+    "socials": [
+      {
+        "name": "Email",
+        "handle": "aarsh.chaurasia.201007@gmail.com",
+        "href": "mailto:aarsh.chaurasia.201007@gmail.com"
+      },
+      {
+        "name": "LinkedIn",
+        "handle": "Aarsh Chaurasia",
+        "href": "https://www.linkedin.com/in/aarshx05/"
+      },
+      {
+        "name": "GitHub",
+        "handle": "aarshx05",
+        "href": "https://github.com/aarshx05"
+      },
+      {
+        "name": "Medium",
+        "handle": "aarshx05",
+        "href": "https://aarshx05.medium.com/"
+      },
+      {
+        "name": "we45 Blogs",
+        "handle": "aarsh",
+        "href": "https://www.we45.com/contributors/aarsh-chaurasia"
+      },
+      {
+        "name": "TryHackMe",
+        "handle": "anonymouscipher",
+        "href": "https://tryhackme.com/p/anonymouscipher"
+      }
+    ],
+    "focusAreas": [
+      "Agentic AI Security, MCP Security and AI Red Teaming",
+      "Application Security Research and DevSecOps Engineering",
+      "Sovereign AI Infrastructure and Secure Data Systems"
+    ]
+  },
+  "blogs": [
+    {
+      "title": "Building PhishSOC and Winning at HackIITK 2025 Experience",
+      "date": "Jun 16, 2025",
+      "link": "https://aarshx05.medium.com/building-phishsoc-and-winning-at-hackiitk-2025-experience-15e9c1cc708c",
+      "desc": "Built PhishSOC, an AI driven phishing detection platform for Security Operations Centers during HackIITK 2025 at IIT Kanpur. The system combined NLP based email analysis screenshot forensics and threat intelligence to detect sophisticated phishing attempts.\n\nCompeted against more than 4000 teams nationwide and secured 2nd Runner Up (3rd place) in the national finale.",
+      "id": "we45"
+    },
+    {
+      "title": "The Automation Paradox: How Security Tools Create New Vulnerabilities",
+      "date": "Jan 23, 2026",
+      "link": "https://aarshx05.medium.com/the-automation-paradox-how-security-tools-create-new-vulnerabilities-b75a62f14103",
+      "desc": "Explores how modern security automation tools like CI CD scanners vulnerability managers and security platforms can themselves become attack vectors. The article analyzes incidents such as SolarWinds CodeCov and CircleCI to show how compromised security tooling can expose thousands of organizations at once and outlines strategies to secure security automation infrastructure.",
+      "id": "okynus"
+    },
+    {
+      "title": "Shift Left Is Dead — Shift Smart: What Enterprises Should Actually Do",
+      "date": "Jan 16, 2026",
+      "link": "https://aarshx05.medium.com/shift-left-is-dead-shift-smart-what-enterprises-should-actually-do-eab9a5287662",
+      "desc": "Explores why traditional “shift left” security often fails in practice due to tool overload alert fatigue and lack of developer security expertise. The article proposes Shift Smart, a risk based approach that prioritizes high risk systems combines automation with human judgment and emphasizes threat modeling and security architecture over excessive scanning.",
+      "id": "securedapp"
+    },
+    {
+      "title": "Will Your Encryption Survive the Quantum Leap?",
+      "date": "Sep 18, 2025",
+      "link": "https://www.we45.com/post/will-your-encryption-survive-the-quantum-leap",
+      "desc": "Explains how advances in quantum computing are accelerating the need for post-quantum cryptography and why organizations must begin planning now. The article outlines the complexity of enterprise cryptographic migration and strategies for building crypto-agile systems ready for NIST’s new post-quantum standards.",
+      "id": "login2xplore"
+    }
+  ],
+  "ticker": [
+    {
+      "type": "Now",
+      "text": "Founding Security Engineer Intern · Vaatun",
+      "color": "green"
+    },
+    {
+      "type": "Internship",
+      "text": "Security Assurance Intern · Microsoft, Azure DevSec",
+      "color": "accent"
+    },
+    {
+      "type": "Impact",
+      "text": "Authorization and tool exposure flaws found across enterprise MCP ecosystems",
+      "color": "primary"
+    },
+    {
+      "type": "Award",
+      "text": "3rd Place · Hack IIT Kanpur 2024 · 4000+ teams",
+      "color": "warning"
+    },
+    {
+      "type": "Ranking",
+      "text": "TryHackMe · Global Top 1%",
+      "color": "green"
+    },
+    {
+      "type": "Exam",
+      "text": "NFAT 2022 · AIR 3 of 50K+ candidates",
+      "color": "primary"
+    },
+    {
+      "type": "Founder",
+      "text": "Okynus Tech · ~$500K valuation · C3iHub, IIT Kanpur",
+      "color": "accent"
+    },
+    {
+      "type": "Fellowship",
+      "text": "Research Fellow · Florida International University",
+      "color": "primary"
+    },
+    {
+      "type": "Publication",
+      "text": "Quantum Encryption article · we45 Blog",
+      "color": "accent"
+    }
+  ],
+  "achievements": {
+    "achievements": [
+      {
+        "title": "3rd Place, Hack IIT Kanpur 2024",
+        "org": "IIT Kanpur",
+        "date": "2024",
+        "color": "warning",
+        "desc": "Secured 3rd place nationally among 4000+ teams with PhishSOC, an AI driven phishing detection platform for SOC environments."
+      },
+      {
+        "title": "AIR 3, NFAT 2022",
+        "org": "National Entrance Examination",
+        "date": "2022",
+        "color": "primary",
+        "desc": "All India Rank 3 out of 50,000+ candidates in the NFAT national entrance examination."
+      },
+      {
+        "title": "Global Top 1%",
+        "org": "TryHackMe",
+        "date": "Ongoing",
+        "color": "green",
+        "desc": "Ranked in the top 1% of TryHackMe users worldwide across offensive security and CTF challenges."
+      },
+      {
+        "title": "Best Innovation Prize",
+        "org": "Hack IIT Kanpur",
+        "date": "2024",
+        "color": "accent",
+        "desc": "Awarded in the Startup Track for Okynus Tech's AI first data protection and vulnerability management solutions."
+      },
+      {
+        "title": "Founder Fellow, C3iHub",
+        "org": "C3iHub, IIT Kanpur",
+        "date": "2024",
+        "color": "primary",
+        "desc": "Selected as a Founder Fellow at C3iHub, the National Cybersecurity Centre at IIT Kanpur, for Okynus Tech."
+      },
+      {
+        "title": "Research Fellow",
+        "org": "Florida International University, USA",
+        "date": "2024",
+        "color": "green",
+        "desc": "Research fellowship at FIU, co-authoring work on encryption challenges in mobile forensics."
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Google Cybersecurity Professional Certificate",
+        "issuer": "Google",
+        "date": "2024",
+        "credentialUrl": ""
+      },
+      {
+        "name": "Security+",
+        "issuer": "CompTIA",
+        "date": "2025",
+        "credentialUrl": ""
+      },
+      {
+        "name": "Practical Ethical Hacking",
+        "issuer": "TCM Security",
+        "date": "2025",
+        "credentialUrl": ""
+      },
+      {
+        "name": "OSCP",
+        "issuer": "OffSec",
+        "date": "Preparing",
+        "credentialUrl": ""
+      },
+      {
+        "name": "Azure Fundamentals (AZ-900) · AWS Academy Graduate",
+        "issuer": "Microsoft · Amazon Web Services",
+        "date": "2024",
+        "credentialUrl": ""
+      }
+    ]
+  }
+}

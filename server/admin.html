@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfolio Admin — Aarsh Chaurasia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:       #070c18;
+    --surface:  #0d1424;
+    --card:     #111827;
+    --border:   rgba(99,102,241,0.15);
+    --border-h: rgba(99,102,241,0.4);
+    --primary:  #6366f1;
+    --secondary:#8b5cf6;
+    --accent:   #06b6d4;
+    --danger:   #ef4444;
+    --success:  #22c55e;
+    --t1: #f1f5f9;
+    --t2: #94a3b8;
+    --t3: #64748b;
+    --radius: 0.875rem;
+    --ease: cubic-bezier(0.4,0,0.2,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;
+    background-image:radial-gradient(rgba(99,102,241,0.12) 1px,transparent 1px);
+    background-size:32px 32px;
+    -webkit-font-smoothing:antialiased}
+  input,textarea,select{font-family:inherit}
+  a{color:inherit;text-decoration:none}
+
+  /* ── Toast ── */
+  #toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem}
+  .toast-item{padding:0.875rem 1.25rem;border-radius:0.75rem;font-size:0.875rem;font-weight:600;
+    backdrop-filter:blur(12px);border:1px solid;animation:slide-in 0.3s ease;transition:opacity 0.4s ease}
+  .toast-item.success{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.3);color:#4ade80}
+  .toast-item.error{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:#f87171}
+  @keyframes slide-in{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+  /* ── Login ── */
+  #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+  .login-card{width:100%;max-width:400px;background:rgba(13,20,36,0.9);border:1px solid var(--border-h);
+    border-radius:1.25rem;padding:2.5rem;backdrop-filter:blur(20px);
+    box-shadow:0 24px 80px rgba(0,0,0,0.5),0 0 60px rgba(99,102,241,0.08);}
+  .login-logo{font-family:'Space Grotesk',sans-serif;font-size:1.375rem;font-weight:700;
+    background:linear-gradient(135deg,var(--primary),var(--accent));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.25rem}
+  .login-sub{font-size:0.8125rem;color:var(--t3);margin-bottom:2rem}
+  .login-card label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--t3);margin-bottom:0.5rem}
+  .login-card input{width:100%;padding:0.75rem 1rem;background:rgba(255,255,255,0.04);
+    border:1px solid var(--border);border-radius:0.625rem;color:var(--t1);font-size:0.9375rem;
+    transition:border-color 0.2s ease;margin-bottom:1.25rem;outline:none}
+  .login-card input:focus{border-color:var(--primary)}
+  .btn-login{width:100%;padding:0.875rem;background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:#fff;border:none;border-radius:0.625rem;font-size:0.9375rem;font-weight:700;
+    cursor:pointer;transition:all 0.25s ease;margin-top:0.5rem}
+  .btn-login:hover{opacity:0.9;transform:translateY(-1px)}
+  .login-err{font-size:0.8125rem;color:#f87171;margin-top:0.75rem;display:none}
+
+  /* ── App Shell ── */
+  #app{display:none;min-height:100vh}
+  .topbar{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 2rem;background:rgba(7,12,24,0.85);backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border)}
+  .topbar-logo{font-family:'Space Grotesk',sans-serif;font-size:1.125rem;font-weight:700;
+    background:linear-gradient(135deg,var(--primary),var(--accent));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .topbar-right{display:flex;align-items:center;gap:1rem}
+  .topbar-user{font-size:0.8125rem;color:var(--t3)}
+  .btn-logout{padding:0.4rem 0.875rem;font-size:0.8125rem;font-weight:600;border-radius:0.5rem;
+    border:1px solid var(--border-h);cursor:pointer;background:transparent;color:var(--t2);
+    transition:all 0.2s ease}
+  .btn-logout:hover{background:rgba(239,68,68,0.1);border-color:#ef4444;color:#f87171}
+
+  /* ── Layout ── */
+  .layout{display:flex;height:calc(100vh - 60px)}
+  .sidebar{width:220px;flex-shrink:0;padding:1.5rem 0;border-right:1px solid var(--border);overflow-y:auto}
+  .sidebar-label{font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--t3);padding:0 1.25rem;margin-bottom:0.5rem}
+  .sidebar-nav{list-style:none}
+  .sidebar-nav li a{display:flex;align-items:center;gap:0.625rem;padding:0.625rem 1.25rem;
+    font-size:0.875rem;font-weight:500;color:var(--t2);border-radius:0;transition:all 0.2s ease;
+    cursor:pointer;border-left:3px solid transparent}
+  .sidebar-nav li a:hover,.sidebar-nav li a.active{color:var(--t1);background:rgba(99,102,241,0.08);border-left-color:var(--primary)}
+  .sidebar-nav li a.active{color:var(--primary)}
+  .dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+  .main{flex:1;overflow-y:auto;padding:2rem}
+  .section-panel{display:none}
+  .section-panel.active{display:block}
+
+  /* ── Panel Header ── */
+  .panel-hdr{margin-bottom:2rem}
+  .panel-hdr h2{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:0.25rem}
+  .panel-hdr p{font-size:0.875rem;color:var(--t3)}
+
+  /* ── Form Elements ── */
+  .form-group{margin-bottom:1.5rem}
+  .form-group label{display:block;font-size:0.75rem;font-weight:600;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--t3);margin-bottom:0.5rem}
+  .form-group input,.form-group textarea,.form-group select{
+    width:100%;padding:0.75rem 1rem;background:rgba(255,255,255,0.03);
+    border:1px solid var(--border);border-radius:0.625rem;color:var(--t1);
+    font-size:0.9rem;outline:none;transition:border-color 0.2s ease;resize:vertical}
+  .form-group input:focus,.form-group textarea:focus{border-color:var(--primary)}
+  .form-group textarea{min-height:90px;line-height:1.6}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+  /* ── Card ── */
+  .card{background:rgba(13,20,36,0.7);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;
+    margin-bottom:1rem;position:relative;transition:border-color 0.2s ease}
+  .card:hover{border-color:var(--border-h)}
+  .card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+  .card-hdr h4{font-size:0.9375rem;font-weight:700}
+
+  /* ── Buttons ── */
+  .btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.625rem 1.25rem;border-radius:0.625rem;
+    font-size:0.875rem;font-weight:600;cursor:pointer;transition:all 0.2s ease;border:none}
+  .btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+  .btn-primary:hover{opacity:0.9;transform:translateY(-1px)}
+  .btn-ghost{background:transparent;border:1px solid var(--border-h);color:var(--t2)}
+  .btn-ghost:hover{background:rgba(99,102,241,0.08);color:var(--t1)}
+  .btn-danger{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171}
+  .btn-danger:hover{background:rgba(239,68,68,0.2)}
+  .btn-sm{padding:0.375rem 0.75rem;font-size:0.8125rem}
+  .btn-add{margin-top:1rem;width:100%;background:rgba(99,102,241,0.07);border:1px dashed rgba(99,102,241,0.3);
+    color:var(--primary);padding:0.75rem;border-radius:var(--radius);font-size:0.875rem;font-weight:600;
+    cursor:pointer;transition:all 0.2s ease;text-align:center}
+  .btn-add:hover{background:rgba(99,102,241,0.12)}
+
+  /* ── Tags input ── */
+  .tags-row{display:flex;flex-wrap:wrap;gap:0.375rem;margin-top:0.5rem}
+  .tag-pill{display:inline-flex;align-items:center;gap:0.375rem;padding:0.25rem 0.625rem;
+    background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:999px;
+    font-size:0.75rem;font-weight:600;color:var(--primary)}
+  .tag-pill button{background:none;border:none;color:currentColor;cursor:pointer;font-size:0.875rem;
+    line-height:1;padding:0;opacity:0.7}
+  .tag-pill button:hover{opacity:1}
+
+  /* ── Save bar ── */
+  .save-bar{position:sticky;bottom:0;padding:1rem 0;margin-top:2rem;
+    background:linear-gradient(to top,var(--bg) 70%,transparent);
+    display:flex;justify-content:flex-end;gap:0.75rem}
+
+  /* ── Divider ── */
+  hr{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+
+  /* ── Checkbox ── */
+  .checkbox-row{display:flex;align-items:center;gap:0.625rem;font-size:0.875rem;color:var(--t2);cursor:pointer}
+  .checkbox-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
+
+  @media(max-width:700px){.form-row{grid-template-columns:1fr}.sidebar{width:180px}}
+</style>
+</head>
+<body>
+
+<!-- Toast container -->
+<div id="toast"></div>
+
+<!-- ══ LOGIN SCREEN ══════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">Portfolio Admin</div>
+    <div class="login-sub">Aarsh Chaurasia — Content Management</div>
+    <div id="login-form">
+      <label for="u">Username</label>
+      <input type="text" id="u" autocomplete="username" placeholder="aarsh" />
+      <label for="p">Password</label>
+      <input type="password" id="p" autocomplete="current-password" placeholder="••••••••" />
+      <button class="btn-login" onclick="doLogin()">Sign In</button>
+      <div class="login-err" id="login-err"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP SHELL ════════════════════════════════════════════ -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo">Portfolio Admin</div>
+    <div class="topbar-right">
+      <span class="topbar-user" id="topbar-user"></span>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-label" style="margin-top:0.5rem">Sections</div>
+      <ul class="sidebar-nav" id="sidebar-nav">
+        <li><a onclick="showPanel('hero')" class="active"><span class="dot" style="background:var(--primary)"></span>Hero</a></li>
+        <li><a onclick="showPanel('about')"><span class="dot" style="background:var(--accent)"></span>About</a></li>
+        <li><a onclick="showPanel('experience')"><span class="dot" style="background:#a78bfa"></span>Experience</a></li>
+        <li><a onclick="showPanel('projects')"><span class="dot" style="background:var(--primary)"></span>Projects</a></li>
+        <li><a onclick="showPanel('research')"><span class="dot" style="background:var(--accent)"></span>Research</a></li>
+        <li><a onclick="showPanel('skills')"><span class="dot" style="background:#22c55e"></span>Skills</a></li>
+        <li><a onclick="showPanel('blogs')"><span class="dot" style="background:#f472b6"></span>Blogs</a></li>
+        <li><a onclick="showPanel('contact')"><span class="dot" style="background:var(--primary)"></span>Contact</a></li>
+        <li style="margin-top:1rem; border-top:1px solid var(--border); padding-top:1rem">
+          <a onclick="showPanel('achievements')"><span class="dot" style="background:#f59e0b"></span>Achievements</a>
+        </li>
+        <li>
+          <a onclick="showPanel('ticker')"><span class="dot" style="background:#22c55e"></span>Ticker Feed</a>
+        </li>
+        <li>
+          <a onclick="showPanel('seo')"><span class="dot" style="background:var(--accent)"></span>SEO Settings</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main" id="main">
+      <!-- HERO -->
+      <div class="section-panel active" id="panel-hero">
+        <div class="panel-hdr">
+          <h2>Hero Section</h2>
+          <p>Your name, tagline, subtitle, stats and timeline badges shown above the fold.</p>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Name</label><input id="h-name" /></div>
+          <div class="form-group"><label>Eyebrow Text</label><input id="h-eyebrow" /></div>
+        </div>
+        <div class="form-group"><label>Subtitle</label><textarea id="h-subtitle" rows="3"></textarea></div>
+        <div class="form-group"><label>Avatar Image URL</label><input id="h-image" placeholder="/aarsh.jpg" /></div>
+        <hr />
+        <div class="panel-hdr"><h2 style="font-size:1rem">Stats (3 items)</h2></div>
+        <div id="h-stats-wrap"></div>
+        <hr />
+        <div class="panel-hdr"><h2 style="font-size:1rem">Timeline Badges / Experience Preview</h2></div>
+        <div id="h-badges-wrap"></div>
+        <button class="btn-add" onclick="addHeroBadge()">+ Add Badge</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('hero')">Save Hero</button></div>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="section-panel" id="panel-about">
+        <div class="panel-hdr"><h2>About Section</h2><p>Bio paragraphs, highlights grid, and the quote.</p></div>
+        <div class="form-group"><label>Bio Paragraph 1</label><textarea id="a-bio0" rows="3"></textarea></div>
+        <div class="form-group"><label>Bio Paragraph 2</label><textarea id="a-bio1" rows="3"></textarea></div>
+        <div class="form-group"><label>Bio Paragraph 3</label><textarea id="a-bio2" rows="3"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Tags (comma-separated)</label><input id="a-tags" placeholder="VAPT, Cryptography, etc." /></div>
+          <div class="form-group"><label>Tag Colors (comma-separated: primary, accent, green)</label><input id="a-tagColors" placeholder="accent, primary, green" /></div>
+        </div>
+        <hr />
+        <div class="panel-hdr"><h2 style="font-size:1rem">Highlights (4 cards)</h2></div>
+        <div id="a-highlights-wrap"></div>
+        <div class="form-group" style="margin-top:1.5rem"><label>Quote</label><textarea id="a-quote" rows="2"></textarea></div>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('about')">Save About</button></div>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="section-panel" id="panel-experience">
+        <div class="panel-hdr"><h2>Experience</h2><p>Add, edit or remove roles. Drag order matters (top = most recent).</p></div>
+        <div id="exp-list"></div>
+        <button class="btn-add" onclick="addExperience()">+ Add Role</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('experience')">Save Experience</button></div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="section-panel" id="panel-projects">
+        <div class="panel-hdr"><h2>Projects</h2><p>Edit project cards shown on the portfolio.</p></div>
+        <div id="proj-list"></div>
+        <button class="btn-add" onclick="addProject()">+ Add Project</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('projects')">Save Projects</button></div>
+      </div>
+
+      <!-- RESEARCH -->
+      <div class="section-panel" id="panel-research">
+        <div class="panel-hdr"><h2>Research &amp; Publications</h2><p>Academic papers and publications.</p></div>
+        <div id="res-list"></div>
+        <button class="btn-add" onclick="addResearch()">+ Add Publication</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('research')">Save Research</button></div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="section-panel" id="panel-skills">
+        <div class="panel-hdr"><h2>Skills</h2><p>Edit skill categories and individual skill tags.</p></div>
+        <div id="skills-list"></div>
+        <button class="btn-add" onclick="addSkillCategory()">+ Add Category</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('skills')">Save Skills</button></div>
+      </div>
+
+      <!-- BLOGS -->
+      <div class="section-panel" id="panel-blogs">
+        <div class="panel-hdr"><h2>Blogs & Insights</h2><p>Add, edit or remove blog posts. These will appear in the new Blogs section.</p></div>
+        <div id="blog-list"></div>
+        <button class="btn-add" onclick="addBlogPost()">+ Add Post</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('blogs')">Save Blogs</button></div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="section-panel" id="panel-contact">
+        <div class="panel-hdr"><h2>Contact</h2><p>Social links and focus areas.</p></div>
+        <div class="panel-hdr" style="margin-bottom:1rem"><h2 style="font-size:1rem">Social Links</h2></div>
+        <div id="social-list"></div>
+        <button class="btn-add" onclick="addSocial()">+ Add Link</button>
+        <hr style="margin:2rem 0"/>
+        <div class="panel-hdr" style="margin-bottom:1rem"><h2 style="font-size:1rem">Focus Areas</h2></div>
+        <div id="focus-area-list"></div>
+        <button class="btn-add" onclick="addFocusArea()">+ Add Focus Area</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('contact')">Save Contact</button></div>
+      </div>
+
+      <!-- SEO SETTINGS -->
+      <div class="section-panel" id="panel-seo">
+        <div class="panel-hdr">
+          <h2>SEO & Branding</h2>
+          <p>Manage how your site appears in search engines and when shared on social media.</p>
+        </div>
+        <div class="form-group"><label>Site Title (Page Title)</label><input id="seo-title" /></div>
+        <div class="form-group"><label>Meta Description</label><textarea id="seo-description" rows="3"></textarea></div>
+        <div class="form-group"><label>Keywords (comma-separated)</label><input id="seo-keywords" /></div>
+        <div class="form-group"><label>OG/Twitter Preview Image URL</label><input id="seo-ogImage" placeholder="/aarsh.jpg" /></div>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('seo')">Save SEO Settings</button></div>
+      </div>
+
+      <!-- ACHIEVEMENTS -->
+      <div class="section-panel" id="panel-achievements">
+        <div class="panel-hdr"><h2>Achievements</h2><p>Awards & distinctions shown on the portfolio.</p></div>
+        <h3 style="font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:1rem">Awards</h3>
+        <div id="awards-list"></div>
+        <button class="btn-add" onclick="addAward()">+ Add Award</button>
+        <hr style="margin:2rem 0"/>
+        <h3 style="font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:1rem">Certifications</h3>
+        <div id="certs-list"></div>
+        <button class="btn-add" onclick="addCert()">+ Add Certification</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('achievements')">Save Achievements</button></div>
+      </div>
+
+      <!-- TICKER FEED -->
+      <div class="section-panel" id="panel-ticker">
+        <div class="panel-hdr"><h2>Activity Ticker</h2><p>The scrolling highlights strip shown at the top of the page.</p></div>
+        <div id="ticker-list"></div>
+        <button class="btn-add" onclick="addTickerItem()">+ Add Item</button>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('ticker')">Save Ticker</button></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+// ── Constants ────────────────────────────────────────────────
+const API = ''   // same origin (admin.html is served by Express)
+
+// ── State ────────────────────────────────────────────────────
+let token   = sessionStorage.getItem('admin_token')
+let content = {}
+
+// ── Toast ────────────────────────────────────────────────────
+function toast(msg, type = 'success') {
+  const el = document.createElement('div')
+  el.className = `toast-item ${type}`
+  el.textContent = msg
+  document.getElementById('toast').appendChild(el)
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 400) }, 3000)
+}
+
+// ── Auth ─────────────────────────────────────────────────────
+async function doLogin() {
+  const username = document.getElementById('u').value.trim()
+  const password = document.getElementById('p').value
+  const errEl    = document.getElementById('login-err')
+  errEl.style.display = 'none'
+  try {
+    const r = await fetch('/api/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ username, password })
+    })
+    const data = await r.json()
+    if (!r.ok) throw new Error(data.error || 'Login failed')
+    token = data.token
+    sessionStorage.setItem('admin_token', token)
+    document.getElementById('topbar-user').textContent = `Signed in as ${data.username}`
+    await loadContent()
+    document.getElementById('login-screen').style.display = 'none'
+    document.getElementById('app').style.display = 'block'
+  } catch(e) {
+    errEl.textContent = e.message
+    errEl.style.display = 'block'
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('admin_token')
+  location.reload()
+}
+
+// Allow Enter key on login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin()
+})
+
+// ── API Helpers ──────────────────────────────────────────────
+async function apiGet(path) {
+  const r = await fetch(path, { headers: { Authorization: `Bearer ${token}` } })
+  if (!r.ok) throw new Error(`GET ${path} failed: ${r.status}`)
+  return r.json()
+}
+
+async function apiPut(path, body) {
+  const r = await fetch(path, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(body)
+  })
+  if (!r.ok) throw new Error(`PUT ${path} failed: ${r.status}`)
+  return r.json()
+}
+
+// ── Load & Render ────────────────────────────────────────────
+async function loadContent() {
+  content = await apiGet('/api/content')
+  renderHero()
+  renderAbout()
+  renderExperience()
+  renderProjects()
+  renderResearch()
+  renderSkills()
+  renderBlogs()
+  renderContact()
+  renderSEO()
+  renderAchievements()
+  renderTicker()
+}
+
+// ── Navigation ───────────────────────────────────────────────
+function showPanel(name) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'))
+  document.getElementById(`panel-${name}`).classList.add('active')
+  document.querySelectorAll('.sidebar-nav li a').forEach(a => a.classList.remove('active'))
+  event.currentTarget.classList.add('active')
+}
+
+// ── Save Section ─────────────────────────────────────────────
+async function saveSection(name) {
+  try {
+    const data = collectSection(name)
+    await apiPut(`/api/content/${name}`, data)
+    content[name] = data
+    toast(`${name.charAt(0).toUpperCase()+name.slice(1)} saved successfully`)
+  } catch(e) {
+    toast(e.message, 'error')
+  }
+}
+
+function collectSection(name) {
+  switch(name) {
+    case 'hero':       return collectHero()
+    case 'about':      return collectAbout()
+    case 'experience': return collectList('exp-list', 'exp-item')
+    case 'projects':   return collectList('proj-list', 'proj-item')
+    case 'research':   return collectList('res-list', 'res-item')
+    case 'skills':     return collectSkills()
+    case 'blogs':        return collectList('blog-list', 'blog-item')
+    case 'contact':      return collectContact()
+    case 'seo':          return collectSEO()
+    case 'achievements': return collectAchievements()
+    case 'ticker':       return collectTicker()
+  }
+}
+
+// ═══ HERO ═══════════════════════════════════════════════════
+function renderHero() {
+  const h = content.hero || {}
+  document.getElementById('h-name').value    = h.name    || ''
+  document.getElementById('h-eyebrow').value = h.eyebrow || ''
+  document.getElementById('h-subtitle').value = h.subtitle || ''
+  document.getElementById('h-image').value    = h.image    || ''
+  const wrap = document.getElementById('h-stats-wrap')
+  wrap.innerHTML = ''
+  ;(h.stats || []).forEach((s, i) => {
+    wrap.innerHTML += `
+      <div class="form-row">
+        <div class="form-group"><label>Stat ${i+1} Number</label><input id="stat-num-${i}" value="${s.num||''}"/></div>
+        <div class="form-group"><label>Stat ${i+1} Label</label><input id="stat-lbl-${i}" value="${s.label||''}"/></div>
+      </div>`
+  })
+
+  const badgesWrap = document.getElementById('h-badges-wrap')
+  badgesWrap.innerHTML = ''
+  ;(h.cardBadges || []).forEach((b, i) => badgesWrap.appendChild(buildHeroBadgeCard(b, i)))
+}
+
+function buildHeroBadgeCard(b, i) {
+  const div = document.createElement('div')
+  div.className = 'card h-badge-item'
+  div.innerHTML = `
+    <div class="card-hdr">
+      <h4>${esc(b.title || 'New Badge')}</h4>
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.card').remove()">Remove</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Dot Color (Hex or CSS)</label><input data-f="dot" value="${esc(b.dot)}"/></div>
+      <div class="form-group"><label>Title</label><input data-f="title" value="${esc(b.title)}" oninput="this.closest('.card').querySelector('h4').textContent=this.value"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Subtitle (optional)</label><input data-f="sub" value="${esc(b.sub||'')}"/></div>
+      <div class="form-group"><label>Tag (e.g. Upcoming)</label><input data-f="tag" value="${esc(b.tag||'')}"/></div>
+    </div>`
+  return div
+}
+
+function addHeroBadge() {
+  document.getElementById('h-badges-wrap').appendChild(buildHeroBadgeCard({ dot: '#a78bfa', title: 'New Role', sub: '', tag: '' }, -1))
+}
+
+function collectHero() {
+  const stats = (content.hero?.stats || []).map((_,i) => ({
+    num:   document.getElementById(`stat-num-${i}`)?.value || '',
+    label: document.getElementById(`stat-lbl-${i}`)?.value || '',
+  }))
+
+  const cardBadges = [...document.querySelectorAll('#h-badges-wrap .h-badge-item')].map(card => ({
+    dot:   card.querySelector('[data-f=dot]')?.value || '',
+    title: card.querySelector('[data-f=title]')?.value || '',
+    sub:   card.querySelector('[data-f=sub]')?.value || null,
+    tag:   card.querySelector('[data-f=tag]')?.value || null,
+  }))
+
+  return {
+    ...content.hero,
+    name:     document.getElementById('h-name').value,
+    eyebrow:  document.getElementById('h-eyebrow').value,
+    subtitle: document.getElementById('h-subtitle').value,
+    image:    document.getElementById('h-image').value,
+    stats,
+    cardBadges,
+  }
+}
+
+// ═══ ABOUT ══════════════════════════════════════════════════
+function renderAbout() {
+  const a = content.about || {}
+  ;(a.bio || []).forEach((b, i) => {
+    const el = document.getElementById(`a-bio${i}`)
+    if (el) el.value = b
+  })
+  const wrap = document.getElementById('a-highlights-wrap')
+  wrap.innerHTML = ''
+  ;(a.highlights || []).forEach((h, i) => {
+    wrap.innerHTML += `
+      <div class="form-row">
+        <div class="form-group"><label>Label ${i+1}</label><input id="hl-lbl-${i}" value="${h.label||''}"/></div>
+        <div class="form-group"><label>Value ${i+1}</label><input id="hl-val-${i}" value="${h.value||''}"/></div>
+      </div>`
+  })
+  document.getElementById('a-tags').value      = (a.tags || []).join(', ')
+  document.getElementById('a-tagColors').value = (a.tagColors || []).join(', ')
+  document.getElementById('a-quote').value     = a.quote || ''
+}
+function collectAbout() {
+  const bio = [0,1,2].map(i => document.getElementById(`a-bio${i}`)?.value || '').filter(Boolean)
+  const highlights = (content.about?.highlights || []).map((_,i) => ({
+    label: document.getElementById(`hl-lbl-${i}`)?.value || '',
+    value: document.getElementById(`hl-val-${i}`)?.value || '',
+  }))
+  const tags       = document.getElementById('a-tags').value.split(',').map(t=>t.trim()).filter(Boolean)
+  const tagColors  = document.getElementById('a-tagColors').value.split(',').map(t=>t.trim()).filter(Boolean)
+  return { ...content.about, bio, highlights, tags, tagColors, quote: document.getElementById('a-quote').value }
+}
+
+// ═══ EXPERIENCE ══════════════════════════════════════════════
+function renderExperience() {
+  const list = document.getElementById('exp-list')
+  list.innerHTML = ''
+  ;(content.experience || []).forEach((e, i) => list.appendChild(buildExpCard(e, i)))
+}
+function buildExpCard(e, i) {
+  const div = document.createElement('div')
+  div.className = 'card exp-item'
+  div.dataset.idx = i
+  div.innerHTML = `
+    <div class="card-hdr">
+      <h4>${e.company} — ${e.role}</h4>
+      <button class="btn btn-danger btn-sm" onclick="removeItem('exp-list','exp-item',${i},renderExperience)">Remove</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Company</label><input data-f="company" value="${esc(e.company)}"/></div>
+      <div class="form-group"><label>Role</label><input data-f="role" value="${esc(e.role)}"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Period</label><input data-f="period" value="${esc(e.period)}"/></div>
+      <div class="form-group"><label>Icon (Letter)</label><input data-f="icon" value="${esc(e.icon||'')}" maxlength="2" style="width:80px"/></div>
+      <div class="form-group"><label>Image URL (Logo)</label><input data-f="image" value="${esc(e.image||'')}"/></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea data-f="description" rows="3">${esc(e.description)}</textarea></div>
+    <div class="form-group"><label>Tags (comma-separated)</label><input data-f="tags" value="${(e.tags||[]).join(', ')}"/></div>
+    <label class="checkbox-row"><input type="checkbox" data-f="highlight" ${e.highlight?'checked':''}/> Highlight (show gradient border)</label>`
+  // live update card title
+  div.querySelectorAll('[data-f=company],[data-f=role]').forEach(inp =>
+    inp.addEventListener('input', () => {
+      const co = div.querySelector('[data-f=company]').value
+      const ro = div.querySelector('[data-f=role]').value
+      div.querySelector('h4').textContent = `${co} — ${ro}`
+    })
+  )
+  return div
+}
+function addExperience() {
+  content.experience = content.experience || []
+  content.experience.push({ id:`new-${Date.now()}`, company:'', role:'', period:'', icon:'N', description:'', tags:[], highlight:false })
+  renderExperience()
+}
+
+// ═══ PROJECTS ════════════════════════════════════════════════
+function renderProjects() {
+  const list = document.getElementById('proj-list')
+  list.innerHTML = ''
+  ;(content.projects || []).forEach((p, i) => list.appendChild(buildProjCard(p, i)))
+}
+function buildProjCard(p, i) {
+  const div = document.createElement('div')
+  div.className = 'card proj-item'
+  div.dataset.idx = i
+  div.innerHTML = `
+    <div class="card-hdr">
+      <h4>${esc(p.name)}</h4>
+      <button class="btn btn-danger btn-sm" onclick="removeItem('proj-list','proj-item',${i},renderProjects)">Remove</button>
+    </div>
+    <div class="form-group"><label>Name</label><input data-f="name" value="${esc(p.name)}" oninput="this.closest('.card').querySelector('h4').textContent=this.value"/></div>
+    <div class="form-group"><label>Description</label><textarea data-f="desc" rows="3">${esc(p.desc)}</textarea></div>
+    <div class="form-group"><label>Tags (comma-separated)</label><input data-f="tags" value="${(p.tags||[]).join(', ')}"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>GitHub URL</label><input data-f="github" value="${esc(p.github||'')}"/></div>
+      <div class="form-group"><label>External Link URL</label><input data-f="link" value="${esc(p.link||'')}"/></div>
+    </div>
+    <label class="checkbox-row"><input type="checkbox" data-f="featured" ${p.featured?'checked':''}/> Featured (gradient border + badge)</label>`
+  return div
+}
+function addProject() {
+  content.projects = content.projects || []
+  content.projects.push({ name:'New Project', desc:'', tags:[], featured:false })
+  renderProjects()
+}
+
+// ═══ RESEARCH ════════════════════════════════════════════════
+function renderResearch() {
+  const list = document.getElementById('res-list')
+  list.innerHTML = ''
+  ;(content.research || []).forEach((r, i) => list.appendChild(buildResCard(r, i)))
+}
+function buildResCard(r, i) {
+  const div = document.createElement('div')
+  div.className = 'card res-item'
+  div.dataset.idx = i
+  div.innerHTML = `
+    <div class="card-hdr">
+      <h4>${esc(r.title)}</h4>
+      <button class="btn btn-danger btn-sm" onclick="removeItem('res-list','res-item',${i},renderResearch)">Remove</button>
+    </div>
+    <div class="form-group"><label>Title</label><input data-f="title" value="${esc(r.title)}" oninput="this.closest('.card').querySelector('h4').textContent=this.value"/></div>
+    <div class="form-group"><label>Subtitle</label><input data-f="subtitle" value="${esc(r.subtitle)}"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Date / Year</label><input data-f="date" value="${esc(r.date)}"/></div>
+      <div class="form-group"><label>Published In</label><input data-f="publishedIn" value="${esc(r.publishedIn)}"/></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea data-f="desc" rows="3">${esc(r.desc)}</textarea></div>
+    <div class="form-group"><label>PDF Link</label><input data-f="link" value="${esc(r.link||'')}"/></div>`
+  return div
+}
+function addResearch() {
+  content.research = content.research || []
+  content.research.push({ title:'New Paper', subtitle:'', date:'2025', publishedIn:'Upcoming', desc:'', link:'#' })
+  renderResearch()
+}
+
+// ═══ SKILLS ══════════════════════════════════════════════════
+function renderSkills() {
+  const list = document.getElementById('skills-list')
+  list.innerHTML = ''
+  ;(content.skills || []).forEach((cat, i) => list.appendChild(buildSkillCard(cat, i)))
+}
+function buildSkillCard(cat, i) {
+  const div = document.createElement('div')
+  div.className = 'card'
+  div.dataset.idx = i
+  const tagPills = (cat.skills||[]).map(s =>
+    `<span class="tag-pill">${esc(s)}<button onclick="removeSkillTag(${i},this)">×</button></span>`
+  ).join('')
+  div.innerHTML = `
+    <div class="card-hdr">
+      <h4>${esc(cat.label)}</h4>
+      <button class="btn btn-danger btn-sm" onclick="removeSkillCat(${i})">Remove Category</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Category Name</label><input data-f="label" value="${esc(cat.label)}" oninput="this.closest('.card').querySelector('h4').textContent=this.value"/></div>
+      <div class="form-group"><label>Color</label>
+        <select data-f="color">
+          <option value="primary" ${cat.color==='primary'?'selected':''}>Indigo (primary)</option>
+          <option value="accent" ${cat.color==='accent'?'selected':''}>Cyan (accent)</option>
+          <option value="green" ${cat.color==='green'?'selected':''}>Green</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Skills</label>
+      <div class="tags-row" id="skill-tags-${i}">${tagPills}</div>
+      <div style="display:flex;gap:0.5rem;margin-top:0.75rem">
+        <input id="new-skill-${i}" placeholder="Add skill…" style="flex:1;padding:0.5rem 0.75rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:0.5rem;color:var(--t1);outline:none;font-size:0.875rem"/>
+        <button class="btn btn-ghost btn-sm" onclick="addSkillTag(${i})">Add</button>
+      </div>
+    </div>`
+  div.querySelector(`#new-skill-${i}`).addEventListener('keydown', e => { if (e.key === 'Enter') addSkillTag(i) })
+  return div
+}
+function addSkillTag(catIdx) {
+  content.skills = collectSkills() // Sync current DOM names/colors first
+  const input = document.getElementById(`new-skill-${catIdx}`)
+  const val   = input.value.trim()
+  if (!val) return
+  const newTags = val.split(',').map(s => s.trim()).filter(Boolean)
+  content.skills[catIdx].skills.push(...newTags)
+  input.value = ''
+  renderSkills()
+}
+function removeSkillTag(catIdx, btn) {
+  content.skills = collectSkills() // Sync current DOM names/colors first
+  const pill = btn.closest('.tag-pill')
+  const text = pill.childNodes[0].textContent.trim()
+  content.skills[catIdx].skills = content.skills[catIdx].skills.filter(s => s !== text)
+  renderSkills()
+}
+function addSkillCategory() {
+  content.skills = content.skills || []
+  content.skills.push({ label: 'New Category', color: 'primary', skills: [] })
+  renderSkills()
+}
+function removeSkillCat(i) {
+  content.skills.splice(i, 1)
+  renderSkills()
+}
+function collectSkills() {
+  return (content.skills || []).map((cat, i) => {
+    const card = document.querySelector(`#skills-list .card[data-idx="${i}"]`)
+    if (!card) return cat
+    return {
+      label:  card.querySelector('[data-f=label]')?.value || cat.label,
+      color:  card.querySelector('[data-f=color]')?.value || cat.color,
+      skills: cat.skills,
+    }
+  })
+}
+
+// ═══ BLOGS ═══════════════════════════════════════════════════
+function renderBlogs() {
+  const list = document.getElementById('blog-list')
+  list.innerHTML = ''
+  ;(content.blogs || []).forEach((p, i) => list.appendChild(buildBlogCard(p, i)))
+}
+function buildBlogCard(p, i) {
+  const div = document.createElement('div')
+  div.className = 'card blog-item'
+  div.dataset.idx = i
+  div.innerHTML = `
+    <div class="card-hdr"><h4>${esc(p.title)}</h4>
+      <button class="btn btn-danger btn-sm" onclick="removeItem('blog-list','blog-item',${i},renderBlogs)">Remove</button></div>
+    <div class="form-group"><label>Title</label><input data-f="title" value="${esc(p.title)}" oninput="this.closest('.card').querySelector('h4').textContent=this.value"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Date</label><input data-f="date" value="${esc(p.date)}"/></div>
+      <div class="form-group"><label>External Link (URL)</label><input data-f="link" value="${esc(p.link||'')}"/></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea data-f="desc" rows="2">${esc(p.desc)}</textarea></div>`
+  return div
+}
+function addBlogPost() {
+  content.blogs = content.blogs || []
+  content.blogs.push({ title:'New Post', date:'Upcoming', desc:'', link:'' })
+  renderBlogs()
+}
+
+// ═══ CONTACT ═════════════════════════════════════════════════
+function renderContact() {
+  const c = content.contact || {}
+  const sl = document.getElementById('social-list')
+  sl.innerHTML = ''
+  ;(c.socials || []).forEach((s, i) => sl.appendChild(buildSocialCard(s, i)))
+  
+  const fl = document.getElementById('focus-area-list')
+  fl.innerHTML = ''
+  ;(c.focusAreas || []).forEach((f, i) => {
+    const div = document.createElement('div')
+    div.className = 'card focus-item'
+    div.dataset.idx = i
+    div.innerHTML = `
+      <div class="card-hdr"><h4>Focus Area ${i+1}</h4><button class="btn btn-danger btn-sm" onclick="removeItem('focus-area-list','focus-item',${i},renderContact)">Remove</button></div>
+      <div class="form-group"><input data-f="val" value="${esc(f)}"/></div>`
+    fl.appendChild(div)
+  })
+}
+function buildSocialCard(s, i) {
+  const div = document.createElement('div')
+  div.className = 'card'
+  div.innerHTML = `
+    <div class="card-hdr"><h4>${esc(s.name)}</h4>
+      <button class="btn btn-danger btn-sm" onclick="this.closest('.card').remove()">Remove</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>Name</label><input data-f="name" value="${esc(s.name)}" oninput="this.closest('.card').querySelector('h4').textContent=this.value"/></div>
+      <div class="form-group"><label>Handle / Display Text</label><input data-f="handle" value="${esc(s.handle)}"/></div>
+    </div>
+    <div class="form-group"><label>Link (href)</label><input data-f="href" value="${esc(s.href)}"/></div>`
+  return div
+}
+function addSocial() {
+  document.getElementById('social-list').appendChild(buildSocialCard({ name:'Platform', handle:'@handle', href:'#' }, -1))
+}
+function addFocusArea() {
+  content.contact.focusAreas = content.contact.focusAreas || []
+  content.contact.focusAreas.push('New focus area')
+  renderContact()
+}
+function collectContact() {
+  const socials = [...document.querySelectorAll('#social-list .card')].map(card => ({
+    name:   card.querySelector('[data-f=name]')?.value   || '',
+    handle: card.querySelector('[data-f=handle]')?.value || '',
+    href:   card.querySelector('[data-f=href]')?.value   || '',
+  }))
+  const focusAreas = [...document.querySelectorAll('#focus-area-list .focus-item')].map(card => card.querySelector('input').value)
+  return { ...content.contact, socials, focusAreas }
+}
+
+// ═══ SEO ═════════════════════════════════════════════════════
+function renderSEO() {
+  const s = content.seo || {}
+  document.getElementById('seo-title').value       = s.title       || ''
+  document.getElementById('seo-description').value = s.description || ''
+  document.getElementById('seo-keywords').value    = s.keywords    || ''
+  document.getElementById('seo-ogImage').value     = s.ogImage     || ''
+}
+
+function collectSEO() {
+  return {
+    title:       document.getElementById('seo-title').value,
+    description: document.getElementById('seo-description').value,
+    keywords:    document.getElementById('seo-keywords').value,
+    ogImage:     document.getElementById('seo-ogImage').value,
+  }
+}
+
+// ═══ ACHIEVEMENTS ════════════════════════════════════════════
+function renderAchievements() {
+  const ach = content.achievements || {}
+  renderAwardsList(ach.achievements || [])
+  renderCertsList(ach.certifications || [])
+}
+function renderAwardsList(list) {
+  const el = document.getElementById('awards-list')
+  el.innerHTML = ''
+  list.forEach((a, i) => el.appendChild(buildAwardCard(a, i)))
+}
+function buildAwardCard(a, i) {
+  const div = document.createElement('div')
+  div.className = 'card award-item'
+  div.dataset.idx = i
+  div.innerHTML = `
+    <div class="card-hdr"><h4>${esc(a.title||'Award')}</h4>
+      <button class="btn btn-danger btn-sm" onclick="removeAward(${i})">Remove</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>Title</label><input data-f="title" value="${esc(a.title||'')}" oninput="this.closest('.card').querySelector('h4').textContent=this.value"/></div>
+      <div class="form-group"><label>Org</label><input data-f="org" value="${esc(a.org||'')}"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Date/Year</label><input data-f="date" value="${esc(a.date||'')}"/></div>
+      <div class="form-group"><label>Color (primary/accent/green/warning)</label>
+        <select data-f="color">
+          <option value="primary" ${a.color==='primary'?'selected':''}>Indigo</option>
+          <option value="accent"  ${a.color==='accent'?'selected':''}>Cyan</option>
+          <option value="green"   ${a.color==='green'?'selected':''}>Green</option>
+          <option value="warning" ${a.color==='warning'?'selected':''}>Amber</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea data-f="desc" rows="2">${esc(a.desc||'')}</textarea></div>`
+  return div
+}
+function addAward() {
+  content.achievements = collectAchievements()
+  const ach = content.achievements || {}
+  ach.achievements = ach.achievements || []
+  ach.achievements.push({ title:'New Award', org:'', date:'2025', color:'primary', desc:'' })
+  content.achievements = ach
+  renderAwardsList(ach.achievements)
+}
+function removeAward(i) {
+  content.achievements = collectAchievements()
+  content.achievements.achievements.splice(i, 1)
+  renderAwardsList(content.achievements.achievements)
+}
+function renderCertsList(list) {
+  const el = document.getElementById('certs-list')
+  el.innerHTML = ''
+  list.forEach((c, i) => el.appendChild(buildCertCard(c, i)))
+}
+function buildCertCard(c, i) {
+  const div = document.createElement('div')
+  div.className = 'card cert-item'
+  div.dataset.idx = i
+  div.innerHTML = `
+    <div class="card-hdr"><h4>${esc(c.name||'Certification')}</h4>
+      <button class="btn btn-danger btn-sm" onclick="removeCert(${i})">Remove</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>Name</label><input data-f="name" value="${esc(c.name||'')}" oninput="this.closest('.card').querySelector('h4').textContent=this.value"/></div>
+      <div class="form-group"><label>Issuer</label><input data-f="issuer" value="${esc(c.issuer||'')}"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Date</label><input data-f="date" value="${esc(c.date||'')}"/></div>
+      <div class="form-group"><label>Credential URL</label><input data-f="credentialUrl" value="${esc(c.credentialUrl||'')}"/></div>
+    </div>`
+  return div
+}
+function addCert() {
+  content.achievements = collectAchievements()
+  const ach = content.achievements || {}
+  ach.certifications = ach.certifications || []
+  ach.certifications.push({ name:'New Cert', issuer:'', date:'2025', credentialUrl:'' })
+  content.achievements = ach
+  renderCertsList(ach.certifications)
+}
+function removeCert(i) {
+  content.achievements = collectAchievements()
+  content.achievements.certifications.splice(i, 1)
+  renderCertsList(content.achievements.certifications)
+}
+function collectAchievements() {
+  const achievements = [...document.querySelectorAll('#awards-list .award-item')].map(card => {
+    const f = k => card.querySelector(`[data-f=${k}]`)?.value || ''
+    return { title: f('title'), org: f('org'), date: f('date'), color: f('color'), desc: f('desc') }
+  })
+  const certifications = [...document.querySelectorAll('#certs-list .cert-item')].map(card => {
+    const f = k => card.querySelector(`[data-f=${k}]`)?.value || ''
+    return { name: f('name'), issuer: f('issuer'), date: f('date'), credentialUrl: f('credentialUrl') }
+  })
+  return { achievements, certifications }
+}
+
+// ═══ TICKER ══════════════════════════════════════════════════
+function renderTicker() {
+  const list = document.getElementById('ticker-list')
+  list.innerHTML = ''
+  ;(content.ticker || []).forEach((item, i) => list.appendChild(buildTickerCard(item, i)))
+}
+function buildTickerCard(item, i) {
+  const div = document.createElement('div')
+  div.className = 'card ticker-adm-item'
+  div.dataset.idx = i
+  div.innerHTML = `
+    <div class="card-hdr"><h4>${esc(item.type||'')} · ${esc(item.text||'')}</h4>
+      <button class="btn btn-danger btn-sm" onclick="removeTickerItem(${i})">Remove</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>Type Label</label><input data-f="type" value="${esc(item.type||'')}"/></div>
+      <div class="form-group"><label>Color (primary/accent/green/warning)</label>
+        <select data-f="color">
+          <option value="primary" ${item.color==='primary'?'selected':''}>Indigo</option>
+          <option value="accent"  ${item.color==='accent'?'selected':''}>Cyan</option>
+          <option value="green"   ${item.color==='green'?'selected':''}>Green</option>
+          <option value="warning" ${item.color==='warning'?'selected':''}>Amber</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Text</label><input data-f="text" value="${esc(item.text||'')}"/></div>`
+  return div
+}
+function addTickerItem() {
+  content.ticker = collectTicker()
+  content.ticker.push({ type:'Achievement', text:'', color:'primary' })
+  renderTicker()
+}
+function removeTickerItem(i) {
+  content.ticker = collectTicker()
+  content.ticker.splice(i, 1)
+  renderTicker()
+}
+function collectTicker() {
+  return [...document.querySelectorAll('#ticker-list .ticker-adm-item')].map(card => ({
+    type:  card.querySelector('[data-f=type]')?.value  || '',
+    text:  card.querySelector('[data-f=text]')?.value  || '',
+    color: card.querySelector('[data-f=color]')?.value || 'primary',
+  }))
+}
+
+// ═══ Generic list collect ════════════════════════════════════
+function collectList(listId, itemClass) {
+  return [...document.querySelectorAll(`#${listId} .${itemClass}`)].map(card => {
+    const obj = {}
+    card.querySelectorAll('[data-f]').forEach(el => {
+      const f = el.dataset.f
+      if (el.type === 'checkbox')    obj[f] = el.checked
+      else if (f === 'tags')         obj[f] = el.value.split(',').map(t=>t.trim()).filter(Boolean)
+      else                            obj[f] = el.value
+    })
+    // Preserve id field
+    const idx = parseInt(card.dataset.idx)
+    if (!isNaN(idx)) {
+      const orig = (content.experience||content.projects||content.research||content.blogs||[])[idx]
+      if (orig?.id) obj.id = orig.id
+    }
+    return obj
+  })
+}
+
+function removeItem(listId, itemClass, idx, rerender) {
+  const arr = listId === 'exp-list' ? content.experience : 
+              listId === 'proj-list' ? content.projects : 
+              listId === 'res-list' ? content.research :
+              listId === 'blog-list' ? content.blogs : 
+              content.contact.focusAreas
+  arr.splice(idx, 1)
+  rerender()
+}
+
+// ═══ Utils ═══════════════════════════════════════════════════
+function esc(s='') { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+
+// ── Auto-login if token exists ───────────────────────────────
+if (token) {
+  loadContent().then(() => {
+    document.getElementById('login-screen').style.display = 'none'
+    document.getElementById('app').style.display = 'block'
+    document.getElementById('topbar-user').textContent = 'Admin Dashboard'
+  }).catch(() => { sessionStorage.removeItem('admin_token'); token = null })
+}
+</script>
+</body>
+</html>

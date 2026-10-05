@@ -1,24 +1,29 @@
+import { ArrowUpRight } from './Icons'
+
 export default function Footer({ content }) {
-  const socials = Array.isArray(content?.contact?.socials) ? content.contact.socials : []
-  const name = content?.hero?.name || 'Aarsh Chaurasia'
+  const { hero, contact } = content
+  const links = (contact?.socials || []).filter((s) => s.href && !s.href.startsWith('mailto:'))
+  const tagline = (hero?.tagline || 'curious by default.').replace(/\.$/, '')
 
   return (
     <footer className="footer">
-      <div className="container footer-inner">
-        <p>
-          © {new Date().getFullYear()} {name}
+      <div className="wrap footer-in">
+        <p className="mono">
+          © {new Date().getFullYear()} {hero?.name} — <span className="cap">{tagline}</span>
+          <span className="dot">.</span>
         </p>
-
-        <div className="footer-links">
-          {socials
-            .filter((s) => !/email/i.test(s.name))
-            .slice(0, 5)
-            .map((s) => (
-              <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer">
-                {s.name}
+        <ul className="footer-links">
+          {links.slice(0, 4).map((s) => (
+            <li key={s.name}>
+              <a href={s.href} target="_blank" rel="noopener noreferrer">
+                {s.name} <ArrowUpRight />
               </a>
-            ))}
-        </div>
+            </li>
+          ))}
+          <li>
+            <a href="#top">Top ↑</a>
+          </li>
+        </ul>
       </div>
     </footer>
   )

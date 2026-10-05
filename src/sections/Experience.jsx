@@ -1,95 +1,102 @@
-import { useState } from 'react'
-import SectionHead from '@/components/SectionHead'
-import LogoMark from '@/components/LogoMark'
-import { parseDescription, isCurrent } from '@/lib/content'
+import { useRef, useState } from 'react'
+import Section from '../components/Section'
+import Dots from '../components/Dots'
+import LogoMark from '../components/LogoMark'
+import { isCurrent, parseDescription } from '../lib/content'
 
-const VISIBLE_BULLETS = 3
-
-function Role({ job }) {
-  const [expanded, setExpanded] = useState(false)
-  const { intro, bullets } = parseDescription(job.description)
-  const current = isCurrent(job.period)
-  const tags = Array.isArray(job.tags) ? job.tags : []
-
-  const shown = expanded ? bullets : bullets.slice(0, VISIBLE_BULLETS)
-  const hidden = bullets.length - shown.length
-
-  return (
-    <article className="tl-item reveal">
-      <div className="tl-aside">
-        <p className="tl-period">{job.period}</p>
-        {current && (
-          <p className="tl-active">
-            <span className="status-dot" aria-hidden="true" />
-            CURRENT
-          </p>
-        )}
-      </div>
-
-      <div>
-        <div className="tl-head">
-          <LogoMark
-            src={job.image}
-            plate={job.logoPlate}
-            letter={job.icon}
-            name={job.company}
-          />
-          <div>
-            <h3 className="tl-company">{job.company}</h3>
-            <p className="tl-role">{job.role}</p>
-          </div>
-        </div>
-
-        {intro && <p className="tl-intro">{intro}</p>}
-
-        {shown.length > 0 && (
-          <ul className="tl-bullets">
-            {shown.map((bullet, i) => (
-              <li key={i}>{bullet}</li>
-            ))}
-          </ul>
-        )}
-
-        {bullets.length > VISIBLE_BULLETS && (
-          <button type="button" className="tl-more" onClick={() => setExpanded((v) => !v)}>
-            {expanded ? '— show less' : `+ ${hidden} more`}
-          </button>
-        )}
-
-        {tags.length > 0 && (
-          <div className="chip-row tl-tags">
-            {tags.map((tag) => (
-              <span className="chip" key={tag}>
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </article>
-  )
-}
-
+/**
+ * Master–detail: the company list stays put while the right-hand panel swaps.
+ * Built as a proper tablist, so arrow keys move through the roles.
+ */
 export default function Experience({ data }) {
-  if (!data?.length) return null
+  const rows = Array.isArray(data) ? data : []
+  const [active, setActive] = useState(0)
+  const tabRefs = useRef([])
+
+  if (!rows.length) return null
+
+  const job = rows[active]
+  const { intro, heading, bullets } = parseDescription(job.description)
+
+  const onKeyDown = (e) => {
+    const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }
+    if (!(e.key in keys) && e.key !== 'Home' && e.key !== 'End') return
+    e.preventDefault()
+    let next = active
+    if (e.key === 'Home') next = 0
+    else if (e.key === 'End') next = rows.length - 1
+    else next = (active + keys[e.key] + rows.length) % rows.length
+    setActive(next)
+    tabRefs.current[next]?.focus()
+  }
 
   return (
-    <section className="section" id="experience">
-      <div className="container">
-        <SectionHead
-          index="02"
-          eyebrow="Experience"
-          title="Where I've"
-          accent="worked."
-          lede="Security engineering across enterprise AI infrastructure, product security, applied research, and founding a venture."
-        />
+    <Section id="experience" tone="band" meta={`${rows.length} Roles`}>
+      <h2 className="display reveal">
+        <Dots text="Where I've Worked. Built. Led." />
+      </h2>
 
-        <div className="timeline">
-          {data.map((job, i) => (
-            <Role key={job.id || `${job.company}-${i}`} job={job} />
+      <div className="xp reveal">
+        <div className="xp-list" role="tablist" aria-orientation="vertical" aria-label="Roles" onKeyDown={onKeyDown}>
+          {rows.map((r, i) => (
+            <button
+              key={r.id || `${r.company}-${i}`}
+              ref={(el) => (tabRefs.current[i] = el)}
+              type="button"
+              role="tab"
+              id={`xp-tab-${i}`}
+              aria-selected={i === active}
+              aria-controls="xp-panel"
+              tabIndex={i === active ? 0 : -1}
+              className={`xp-tab${i === active ? ' is-active' : ''}`}
+              onClick={() => setActive(i)}
+            >
+              <LogoMark src={r.image} srcLight={r.imageLight} plate={r.logoPlate} letter={r.icon} name={r.company} />
+              <span className="xp-tab-t">
+                <span className="xp-tab-co">{r.company}</span>
+                <span className="mono xp-tab-when">{r.period}</span>
+              </span>
+            </button>
           ))}
         </div>
+
+        <article
+          key={active}
+          id="xp-panel"
+          className="xp-panel card"
+          role="tabpanel"
+          aria-labelledby={`xp-tab-${active}`}
+          tabIndex={0}
+        >
+          <p className="mono xp-panel-when">
+            {job.period}
+            {isCurrent(job.period) && <em className="tag-now">Now</em>}
+          </p>
+          <h3 className="xp-role">{job.role}</h3>
+          <p className="xp-at">@ {job.company}</p>
+
+          {intro && <p className="xp-intro">{intro}</p>}
+
+          {bullets.length > 0 && (
+            <>
+              {heading && <p className="mono xp-sub">{heading}</p>}
+              <ul className="xp-bullets">
+                {bullets.map((b, i) => (
+                  <li key={i}>{b}</li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {job.tags?.length > 0 && (
+            <ul className="chips">
+              {job.tags.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          )}
+        </article>
       </div>
-    </section>
+    </Section>
   )
 }

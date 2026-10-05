@@ -1,34 +1,29 @@
-import SectionHead from '@/components/SectionHead'
+import Section from '../components/Section'
+import Dots from '../components/Dots'
 
 export default function Skills({ data }) {
-  if (!data?.length) return null
+  const groups = Array.isArray(data) ? data : []
 
   return (
-    <section className="section" id="skills">
-      <div className="container">
-        <SectionHead
-          index="04"
-          eyebrow="Capabilities"
-          title="Skills &"
-          accent="tooling."
-          lede="What I reach for day to day, grouped by the kind of problem it solves."
-        />
+    <Section id="skills" tone="band" meta={`${groups.length} Areas`}>
+      <h2 className="display reveal">
+        <Dots text="Skills & Technologies." />
+      </h2>
 
-        <div className="skill-groups reveal">
-          {data.map((category) => (
-            <div className="skill-group" key={category.label}>
-              <h3>{category.label}</h3>
-              <div className="chip-row">
-                {(category.skills || []).map((skill) => (
-                  <span className="chip" key={skill}>
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="kit">
+        {groups.map((g, i) => (
+          <section key={g.label} className="card kit-card reveal" aria-label={g.label}>
+            <h3 className="mono kit-h">
+              <span>{String(i + 1).padStart(2, '0')}</span> {g.label}
+            </h3>
+            <ul className="chips">
+              {g.skills?.map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
-    </section>
+    </Section>
   )
 }

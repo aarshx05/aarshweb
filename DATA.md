@@ -399,7 +399,7 @@ Message
 Your message here...
 Send Message
 Connect With Me
-aarsh.chaurasia.201007@gmail.com
+aarsh.chaurasia05@gmail.com
 LinkedIn
 GitHub
 Instagram

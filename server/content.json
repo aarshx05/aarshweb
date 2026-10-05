@@ -7,9 +7,10 @@
   },
   "hero": {
     "name": "Aarsh Chaurasia",
+    "tagline": "curious by default.",
     "image": "/Aarsh_Pro_New.jpeg",
     "eyebrow": "Security Engineer · AI Security Researcher · Founder",
-    "subtitle": "AI security and AI for security. I red team agentic systems and MCP servers, then build the AI driven tooling that finds those failures at scale. Right now that means sovereign AI infrastructure and agentic security scanners at Vaatun, after an AI driven security testing platform for internal MCP servers at Microsoft and a security venture I founded out of IIT Kanpur's C3iHub.",
+    "subtitle": "I build things and think about what could go wrong. AI interests me both for the problems it helps solve and the new ones it creates.\n\nMy work spans security engineering at Microsoft, product security at we45 and building Okynus Tech from scratch.\n\nI’m a generalist by approach. I like trying unfamiliar things, asking questions and working through problems without an obvious answer.",
     "stats": [
       {
         "num": "Founder Fellow",
@@ -36,7 +37,7 @@
       {
         "dot": "#6366f1",
         "title": "NFSU · B.Tech-M.Tech CS (Cybersecurity)",
-        "sub": "CGPA 9.30 / 10",
+        "sub": "2022 – 2027",
         "tag": null
       }
     ]
@@ -55,9 +56,8 @@
     ],
     "heading": "Practitioner. Researcher. Founder.",
     "bio": [
-      "Security engineer working at the point where AI systems meet real attack surface. I build the tooling that finds how agentic systems, MCP servers and AI driven pipelines fail, and the infrastructure that keeps them from failing. Currently pursuing an integrated B.Tech-M.Tech in Computer Science with Cyber Security at National Forensic Sciences University (CGPA 9.30/10).",
-      "At <strong>Vaatun</strong> I architect sovereign AI inference across multi cloud infrastructure and build agentic AI security scanners for production workflows. Previously at <strong>Microsoft</strong>, I built an AI driven security testing platform for internal MCP servers with the Azure DevSec Team, surfacing <strong>validated vulnerabilities</strong> across authorization, unsafe tool exposure and capability escalation paths.",
-      "Before that, product security at <strong>we45</strong> for enterprise SaaS platforms, and founder of <strong>Okynus Tech</strong>, an enterprise security venture incubated at <strong>C3iHub, IIT Kanpur</strong>, taken from validation to a ~$500K valuation."
+      "I work where AI meets real attack surface: finding how intelligent systems fail, and building what keeps them safe.",
+      "Today that’s at <strong>Vaatun</strong>. Before it came <strong>Microsoft</strong> and <strong>we45</strong>, and <strong>Okynus Tech</strong>, a security company I founded out of IIT Kanpur’s C3iHub and took to a <strong>~$500K valuation</strong>."
     ],
     "highlights": [
       {
@@ -77,7 +77,7 @@
         "value": "Microsoft · we45 · Okynus Tech (Founder)"
       }
     ],
-    "quote": "Cybersecurity isn't just about reacting it's about building ahead of the threat."
+    "quote": "That sounds interesting, let’s try it."
   },
   "experience": [
     {
@@ -136,7 +136,8 @@
       "role": "Founder",
       "period": "Apr 2024 – Jun 2025",
       "icon": "O",
-      "image": "/logos/okynus.png",
+      "image": "/logos/okynus-mark-on-dark.svg",
+      "imageLight": "/logos/okynus-mark-on-light.svg",
       "description": "Founded and led an enterprise security venture incubated under IIT Kanpur's C3iHub.\n\nWhat I did\n\n• Architected a patent grade encryption algorithm and data protection mechanisms for OkSentinel, a proprietary secure data sharing platform leveraging novel algorithms to protect sensitive enterprise data\n\n• Built an agentic AI retesting system for OkNexus to automatically revalidate security findings within CI/CD pipelines, reducing manual triage effort by ~70% and accelerating verification turnaround\n\n• Led technical validation and security architecture across application security, cloud security and threat modelling, taking Okynus from product validation to a ~$500K valuation through IIT Kanpur C3iHub and SSIP 2.0",
       "tags": [
         "Applied Cryptography",
@@ -203,6 +204,7 @@
       "period": "Jun 2024 – Sep 2024",
       "icon": "F",
       "image": "/logos/fiu.png",
+      "imageLight": "/logos/fiu-light.png",
       "description": "Conducted research on challenges posed by modern encryption in mobile operating systems and their impact on digital forensic investigations.\n\nWhat I did\n\n• Co authored research on improving mobile device forensics using dynamic analysis AI assisted pattern detection and cloud based forensic techniques\n\n• Designed simulations to analyze encrypted systems and observe transient decrypted states during runtime\n\n• Used tools such as Frida and Xposed Framework to monitor application behavior and identify potential weaknesses in encrypted environments\n\n• Explored scalable forensic approaches using cloud based analysis for distributed data and key management systems",
       "tags": [
         "Mobile Forensics",
@@ -438,8 +440,8 @@
     "socials": [
       {
         "name": "Email",
-        "handle": "aarsh.chaurasia.201007@gmail.com",
-        "href": "mailto:aarsh.chaurasia.201007@gmail.com"
+        "handle": "aarsh.chaurasia05@gmail.com",
+        "href": "mailto:aarsh.chaurasia05@gmail.com"
       },
       {
         "name": "LinkedIn",
@@ -523,11 +525,6 @@
       "type": "Award",
       "text": "3rd Place · Hack IIT Kanpur 2024 · 4000+ teams",
       "color": "warning"
-    },
-    {
-      "type": "Ranking",
-      "text": "TryHackMe · Global Top 1%",
-      "color": "green"
     },
     {
       "type": "Exam",

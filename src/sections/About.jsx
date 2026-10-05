@@ -1,48 +1,61 @@
-import SectionHead from '@/components/SectionHead'
+import Section from '../components/Section'
+import Dots from '../components/Dots'
+import { safeInline } from '../lib/sections'
 
-export default function About({ data }) {
-  if (!data) return null
-
-  const bio = Array.isArray(data.bio) ? data.bio : []
-  const highlights = Array.isArray(data.highlights) ? data.highlights : []
-  const hasAside = highlights.length > 0 || data.quote
-
-  // "Practitioner. Researcher. Founder." -> the last word carries the serif.
-  const words = String(data.heading || 'About').trim().split(/\s+/)
-  const accent = words.length > 1 ? words.pop() : null
-  const title = words.join(' ')
-
+export default function About({ data, heroImage, name }) {
+  const image = data.image || heroImage
   return (
-    <section className="section" id="about">
-      <div className="container">
-        <SectionHead index="01" eyebrow="About" title={title} accent={accent} />
+    <Section id="about" meta="Security · AI · Founder">
+      <h2 className="display reveal">
+        <Dots text={data.heading} />
+      </h2>
 
-        <div className={`about-grid${hasAside ? '' : ' is-single'}`}>
-          <div className="prose reveal">
-            {bio.map((paragraph, i) => (
-              // Bios are authored in the admin panel and may contain <strong>.
-              <p key={i} dangerouslySetInnerHTML={{ __html: paragraph }} />
-            ))}
-          </div>
-
-          {hasAside && (
-            <aside className="about-aside reveal reveal-1">
-              {highlights.length > 0 && (
-                <dl className="facts">
-                  {highlights.map((h) => (
-                    <div className="fact" key={h.label}>
-                      <dt>{h.label}</dt>
-                      <dd dangerouslySetInnerHTML={{ __html: h.value }} />
-                    </div>
-                  ))}
-                </dl>
-              )}
-
-              {data.quote && <blockquote className="quote">{data.quote}</blockquote>}
-            </aside>
-          )}
+      <div className="bento">
+        <div className="bento-bio reveal">
+          {data.bio?.map((p, i) => (
+            <p key={i} dangerouslySetInnerHTML={{ __html: safeInline(p) }} />
+          ))}
         </div>
+
+        {image && (
+          <figure className="portrait reveal reveal-1">
+            <img src={image} alt={`Portrait of ${name}`} loading="lazy" decoding="async" />
+          </figure>
+        )}
+
+        {data.highlights?.length > 0 && (
+          <dl className="bento-facts">
+            {data.highlights.map((h) => {
+              // A trailing "· CGPA …" is kept, but as a quiet footnote rather than part of the headline fact.
+              const m = String(h.value).match(/^(.*?)\s*·\s*(CGPA.*)$/i)
+              return (
+                <div key={h.label} className="card reveal">
+                  <dt className="mono">{h.label}</dt>
+                  <dd>
+                    {m ? m[1] : h.value}
+                    {m && <span className="fact-note mono">{m[2]}</span>}
+                  </dd>
+                </div>
+              )
+            })}
+          </dl>
+        )}
+
+        {data.quote && (
+          <blockquote className="quote-card reveal">
+            <span className="mono">// My Default Answer</span>
+            <p>{data.quote}</p>
+          </blockquote>
+        )}
+
+        {data.tags?.length > 0 && (
+          <ul className="chips bento-tags reveal">
+            {data.tags.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+        )}
       </div>
-    </section>
+    </Section>
   )
 }

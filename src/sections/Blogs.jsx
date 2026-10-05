@@ -1,54 +1,36 @@
-import SectionHead from '@/components/SectionHead'
+import Section from '../components/Section'
+import Dots from '../components/Dots'
+import { ArrowUpRight } from '../components/Icons'
 
-export default function Blogs({ data }) {
-  if (!data?.length) return null
+export default function Blogs({ data, mediumHref }) {
+  const posts = Array.isArray(data) ? data : []
 
   return (
-    <section className="section" id="writing">
-      <div className="container">
-        <SectionHead
-          index="07"
-          eyebrow="Writing"
-          title="Notes &"
-          accent="articles."
-          lede="Technical writing on applied cryptography, AI security and the practice of DevSecOps."
-        />
+    <Section id="writing" tone="band" meta="Medium · we45">
+      <h2 className="display reveal">
+        <Dots text="Articles & Blog Posts." />
+      </h2>
 
-        <div className="card-grid">
-          {data.map((post, i) => (
-            <article className={`card reveal reveal-${i % 3}`} key={post.title} data-spotlight>
-              <p className="mono" style={{ marginBottom: 12 }}>
-                {post.date}
-              </p>
+      <ul className="posts">
+        {posts.map((b) => (
+          <li key={b.link || b.title} className="reveal">
+            <a className="post" href={b.link} target="_blank" rel="noopener noreferrer">
+              <span className="mono post-date">{b.date}</span>
+              <span className="post-main">
+                <span className="post-title">{b.title}</span>
+                <span className="post-desc">{String(b.desc || '').split(/\n{2,}/)[0]}</span>
+              </span>
+              <ArrowUpRight className="post-go" width={20} height={20} />
+            </a>
+          </li>
+        ))}
+      </ul>
 
-              <h3 className="card-title">
-                {post.link ? (
-                  <a href={post.link} target="_blank" rel="noopener noreferrer">
-                    {post.title}
-                  </a>
-                ) : (
-                  post.title
-                )}
-              </h3>
-
-              <p className="card-desc" style={{ whiteSpace: 'pre-line' }}>
-                {post.desc}
-              </p>
-
-              {post.link && (
-                <div className="card-foot">
-                  <a className="link" href={post.link} target="_blank" rel="noopener noreferrer">
-                    Read article
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </a>
-                </div>
-              )}
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+      {mediumHref && (
+        <a className="more-link reveal" href={mediumHref} target="_blank" rel="noopener noreferrer">
+          All Writing <ArrowUpRight />
+        </a>
+      )}
+    </Section>
   )
 }

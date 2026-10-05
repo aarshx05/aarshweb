@@ -1,61 +1,36 @@
-import SectionHead from '@/components/SectionHead'
-
-const isUpcoming = (venue = '') => /upcoming|in review|submitted/i.test(venue)
+import Section from '../components/Section'
+import Dots from '../components/Dots'
+import { ArrowUpRight } from '../components/Icons'
 
 export default function Research({ data }) {
-  if (!data?.length) return null
+  const papers = Array.isArray(data) ? data : []
 
   return (
-    <section className="section" id="research">
-      <div className="container">
-        <SectionHead
-          index="05"
-          eyebrow="Research"
-          title="Published &"
-          accent="in progress."
-          lede="Applied security research spanning mobile forensics, behavioural biometrics and next-generation networks."
-        />
+    <Section id="research" meta="Papers & Ongoing Work">
+      <h2 className="display reveal">
+        <Dots text="Research & Publications." />
+      </h2>
 
-        <div className="card-grid">
-          {data.map((paper, i) => (
-            <article className={`card reveal reveal-${i % 3}`} key={paper.title} data-spotlight>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-                <span className={`chip${isUpcoming(paper.publishedIn) ? '' : ' chip-accent'}`}>
-                  {isUpcoming(paper.publishedIn) ? 'Upcoming' : 'Published'}
+      <ul className="papers">
+        {papers.map((r) => {
+          const live = r.link && r.link !== '#'
+          const Tag = live ? 'a' : 'div'
+          const props = live ? { href: r.link, target: '_blank', rel: 'noopener noreferrer' } : {}
+          return (
+            <li key={r.title} className="reveal">
+              <Tag className={`paper card${live ? ' is-link' : ''}`} {...props}>
+                <span className="mono paper-k">
+                  {r.date} · {r.publishedIn}
                 </span>
-                <span className="mono" style={{ marginLeft: 'auto' }}>
-                  {paper.date}
-                </span>
-              </div>
-
-              <h3 className="card-title">{paper.title}</h3>
-
-              {paper.subtitle && (
-                <p style={{ fontSize: 13.5, color: 'var(--text-3)', marginBottom: 14 }}>
-                  {paper.subtitle}
-                </p>
-              )}
-
-              <p className="card-desc">{paper.desc}</p>
-
-              <div className="card-foot">
-                <span className="mono">{paper.publishedIn}</span>
-                {paper.link && paper.link !== '#' && (
-                  <a
-                    className="link"
-                    style={{ marginLeft: 'auto' }}
-                    href={paper.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Read ↗
-                  </a>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+                <span className="paper-title">{r.title}</span>
+                <span className="paper-sub">{r.subtitle}</span>
+                <span className="paper-desc">{r.desc}</span>
+                {live && <ArrowUpRight className="paper-go" width={18} height={18} />}
+              </Tag>
+            </li>
+          )
+        })}
+      </ul>
+    </Section>
   )
 }

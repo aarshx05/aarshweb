@@ -11,8 +11,13 @@ export function useContent() {
   useEffect(() => {
     let cancelled = false
     
-    // First try the API (works on Vercel/Local Backend)
-    fetch('/api/content')
+    // Dev (npm run dev + local admin server): try the live API first.
+    // Production is static hosting (GitHub Pages) with no API, so skip straight to
+    // the static content.json instead of making a request that always fails.
+    const api = import.meta.env.DEV
+      ? fetch('/api/content')
+      : Promise.reject(new Error('static build'))
+    api
       .then(r => {
         if (!r.ok) throw new Error(`API ${r.status}`)
         return r.json()

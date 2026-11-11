@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# aarshc.me
 
-## Getting Started
+Personal site of Aarsh Chaurasia. Vite + React, content driven by `public/content.json`,
+deployed to **GitHub Pages** at <https://aarshc.me>.
 
-First, run the development server:
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:5173
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build        # vite build + scripts/prerender.mjs  ->  dist/
+npm run preview
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`scripts/prerender.mjs` runs after the Vite build and makes the site readable without JavaScript
+(search engines, AI crawlers like GPTBot/ClaudeBot/PerplexityBot, link previews):
 
-## Learn More
+- writes the content of `content.json` as plain HTML inside `#root` (React replaces it on load)
+- adds static Person JSON-LD and absolute social-preview image URLs
+- generates `robots.txt` (all crawlers allowed), `sitemap.xml`, `llms.txt` and `404.html`
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Every push to `main` runs `.github/workflows/deploy.yml`, which builds and publishes `dist/` to GitHub Pages.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+One-time setup:
 
-## Deploy on Vercel
+1. **Settings → Pages → Build and deployment → Source: GitHub Actions**
+2. DNS for `aarshc.me` (custom domain comes from `public/CNAME`):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   | Type | Name | Value |
+   |---|---|---|
+   | A | `@` | `185.199.108.153` |
+   | A | `@` | `185.199.109.153` |
+   | A | `@` | `185.199.110.153` |
+   | A | `@` | `185.199.111.153` |
+   | AAAA | `@` | `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153` |
+   | CNAME | `www` | `aarshx05.github.io` |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Settings → Pages → Enforce HTTPS** once the certificate is issued.
+
+## Editing content
+
+Edit `public/content.json` and push. The optional local admin panel lives in `server/`:
+
+```bash
+cd server && npm install
+node setup.js        # prompts for an admin username/password; writes gitignored auth.json
+npm start            # http://localhost:3001/admin
+```
+
+Copy the updated `server/content.json` to `public/content.json` before committing.

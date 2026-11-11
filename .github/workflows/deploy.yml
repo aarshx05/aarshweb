@@ -1,23 +1,14 @@
-# Builds the site and deploys dist/ to InfinityFree over FTP on every push to main.
+# Builds the site and deploys dist/ to GitHub Pages on every push to main.
 #
-# One-time setup — add these under:
-#   GitHub repo > Settings > Secrets and variables > Actions
+# One-time setup:
+#   1. Repo > Settings > Pages > Build and deployment > Source: "GitHub Actions".
+#   2. Custom domain: public/CNAME contains "aarshc.me" (copied into dist/ by Vite).
+#      Point DNS at GitHub Pages (see README), then tick "Enforce HTTPS" in Settings > Pages.
 #
-#   Secrets (tab "Secrets"):
-#     FTP_SERVER     InfinityFree FTP hostname, e.g. ftpupload.net
-#     FTP_USERNAME   FTP / account username, e.g. if0_12345678  (shown in the
-#                    InfinityFree control panel under "FTP Details")
-#     FTP_PASSWORD   FTP password (same panel; it's the account password)
-#
-#   Variable (tab "Variables", optional):
-#     FTP_SERVER_DIR target folder, must end with "/". Defaults to
-#                    "aarshc.me/htdocs/" (InfinityFree puts a custom domain's web
-#                    root at <domain>/htdocs/) — only set this if yours differs.
-#
-# After the secrets exist, trigger a deploy with the "Run workflow" button
-# (Actions tab) or by pushing any commit to main.
+# The old FTP secrets (FTP_SERVER / FTP_USERNAME / FTP_PASSWORD) are no longer used
+# and can be deleted from Settings > Secrets and variables > Actions.
 
-name: Deploy to InfinityFree
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -26,15 +17,16 @@ on:
 
 # Never let two deploys race; a newer push supersedes an in-flight one.
 concurrency:
-  group: deploy-main
+  group: pages
   cancel-in-progress: true
 
-# The job only reads the repo — no need for the default write token.
 permissions:
   contents: read
+  pages: write      # publish to GitHub Pages
+  id-token: write   # required by actions/deploy-pages
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -49,31 +41,33 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build (vite build + prerender)
         run: npm run build
 
-      # Catches a broken build before we push it live: dist/index.html and the
-      # content the site falls back to must both exist.
+      # Catch a broken build before it goes live.
       - name: Verify build output
         run: |
-          test -f dist/index.html || { echo "::error::dist/index.html missing"; exit 1; }
-          test -f dist/content.json || { echo "::error::dist/content.json missing — the site has no content to fall back on"; exit 1; }
-          echo "dist/ looks good:"
-          ls -la dist/
+          for f in index.html content.json robots.txt sitemap.xml llms.txt 404.html CNAME; do
+            test -f "dist/$f" || { echo "::error::dist/$f missing"; exit 1; }
+          done
+          grep -q 'class="prerendered"' dist/index.html || { echo "::error::prerendered content missing from index.html"; exit 1; }
+          echo "dist/ looks good:"; ls -la dist/
 
-      - name: Deploy dist/ over FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp          # InfinityFree free hosting is plain FTP on port 21
-          port: 21
-          local-dir: ./dist/     # contents of dist/ are uploaded (trailing slash required)
-          server-dir: ${{ vars.FTP_SERVER_DIR || 'aarshc.me/htdocs/' }}
-          # The action keeps a .ftp-deploy-sync-state.json on the server and only
-          # uploads changed files. The FIRST run over a site that was uploaded by
-          # hand will leave the old hashed asset files behind (harmless clutter).
-          # To wipe htdocs/ and start clean ONCE, uncomment the next line for a
-          # single run, then comment it out again:
-          # dangerous-clean-slate: true
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

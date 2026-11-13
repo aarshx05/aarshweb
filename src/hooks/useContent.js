@@ -1,16 +1,29 @@
 import { useState, useEffect } from 'react'
 
-// Fallback static content (used if the server is unreachable)
-const FALLBACK = null
+/**
+ * The production build inlines content.json into the page
+ * (<script type="application/json" id="site-content">, written by
+ * scripts/prerender.mjs), so the first render needs no second request.
+ */
+function inlineContent() {
+  if (import.meta.env.DEV) return null
+  try {
+    const el = document.getElementById('site-content')
+    return el ? JSON.parse(el.textContent) : null
+  } catch {
+    return null
+  }
+}
 
 export function useContent() {
-  const [content, setContent] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [content, setContent] = useState(inlineContent)
+  const [loading, setLoading] = useState(() => !content)
   const [error,   setError  ] = useState(null)
 
   useEffect(() => {
+    if (content) return undefined
     let cancelled = false
-    
+
     // Dev (npm run dev + local admin server): try the live API first.
     // Production is static hosting (GitHub Pages) with no API, so skip straight to
     // the static content.json instead of making a request that always fails.
@@ -24,7 +37,7 @@ export function useContent() {
       })
       .then(data => { if (!cancelled) { setContent(data); setLoading(false) } })
       .catch(apiErr => {
-        // Fallback to static JSON file (works on static hosts like Infinity Free)
+        // Fallback to the static JSON file (static hosting, or no admin server running)
         console.warn('API unavailable, trying static fallback:', apiErr.message)
         fetch('/content.json')
           .then(r => {
@@ -40,6 +53,7 @@ export function useContent() {
           })
       })
     return () => { cancelled = true }
+    // Runs once: `content` is only read here to skip the fetch when it was inlined.
   }, [])
 
   return { content, loading, error }

@@ -210,6 +210,9 @@
         <li>
           <a onclick="showPanel('seo')"><span class="dot" style="background:var(--accent)"></span>SEO Settings</a>
         </li>
+        <li>
+          <a onclick="showPanel('profile')"><span class="dot" style="background:#22c55e"></span>Profile &amp; Hiring</a>
+        </li>
       </ul>
     </aside>
 
@@ -320,6 +323,39 @@
         <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('seo')">Save SEO Settings</button></div>
       </div>
 
+      <!-- PROFILE & HIRING -->
+      <div class="section-panel" id="panel-profile">
+        <div class="panel-hdr">
+          <h2>Profile &amp; Hiring</h2>
+          <p>The facts recruiters and AI assistants look for first. They feed the "short version" block, the résumé page and PDF, resume.json, llms.txt and the structured data. Anything left empty is simply not shown.</p>
+        </div>
+        <div class="form-group"><label>Headline (the role you want to be found for)</label><input id="pf-headline" placeholder="AI Security Engineer" /></div>
+        <div class="form-group"><label>Summary (third person, 2–4 sentences — update it when your job changes)</label><textarea id="pf-summary" rows="5"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>City</label><input id="pf-city" /></div>
+          <div class="form-group"><label>State / Region</label><input id="pf-region" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Country</label><input id="pf-country" /></div>
+          <div class="form-group"><label>Country code (ISO, e.g. IN)</label><input id="pf-countryCode" maxlength="2" style="width:80px" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Hiring status</label>
+            <select id="pf-status"><option value="">Not stated</option><option value="open">Open to opportunities (shown publicly)</option></select>
+          </div>
+          <div class="form-group"><label>Available from (e.g. July 2027)</label><input id="pf-from" /></div>
+        </div>
+        <div class="form-group"><label>Roles you want to be found for (comma-separated; shown as "Roles", or "Looking for" when status is open)</label><input id="pf-roles" /></div>
+        <div class="form-row">
+          <div class="form-group"><label>Employment types (comma-separated, e.g. Full-time)</label><input id="pf-types" /></div>
+          <div class="form-group"><label>Work modes (comma-separated, e.g. Remote, Hybrid, On-site)</label><input id="pf-workModes" /></div>
+        </div>
+        <div class="form-group"><label>Relocation (e.g. Open to relocation)</label><input id="pf-relocation" /></div>
+        <div class="form-group"><label>Languages (comma-separated)</label><input id="pf-languages" /></div>
+        <p style="color:var(--muted,#888);font-size:.85rem;margin:.5rem 0 1rem">Education is edited in content.json ("profile.education").</p>
+        <div class="save-bar"><button class="btn btn-primary" onclick="saveSection('profile')">Save Profile</button></div>
+      </div>
+
       <!-- ACHIEVEMENTS -->
       <div class="section-panel" id="panel-achievements">
         <div class="panel-hdr"><h2>Achievements</h2><p>Awards & distinctions shown on the portfolio.</p></div>
@@ -425,6 +461,7 @@ async function loadContent() {
   renderBlogs()
   renderContact()
   renderSEO()
+  renderProfile()
   renderAchievements()
   renderTicker()
 }
@@ -460,6 +497,7 @@ function collectSection(name) {
     case 'blogs':        return collectList('blog-list', 'blog-item')
     case 'contact':      return collectContact()
     case 'seo':          return collectSEO()
+    case 'profile':      return collectProfile()
     case 'achievements': return collectAchievements()
     case 'ticker':       return collectTicker()
   }
@@ -835,10 +873,37 @@ function renderSEO() {
 
 function collectSEO() {
   return {
+    ...content.seo,
     title:       document.getElementById('seo-title').value,
     description: document.getElementById('seo-description').value,
     keywords:    document.getElementById('seo-keywords').value,
     ogImage:     document.getElementById('seo-ogImage').value,
+  }
+}
+
+// ═══ PROFILE & HIRING ════════════════════════════════════════
+const pfList = v => (v || []).join(', ')
+const pfSplit = id => document.getElementById(id).value.split(',').map(t => t.trim()).filter(Boolean)
+function renderProfile() {
+  const p = content.profile || {}, loc = p.location || {}, o = p.openTo || {}
+  const set = (id, v) => { document.getElementById(id).value = v || '' }
+  set('pf-headline', p.headline); set('pf-summary', p.summary)
+  set('pf-city', loc.city); set('pf-region', loc.region); set('pf-country', loc.country); set('pf-countryCode', loc.countryCode)
+  set('pf-status', o.status); set('pf-from', o.from); set('pf-relocation', o.relocation)
+  set('pf-roles', pfList(p.roles)); set('pf-types', pfList(o.types)); set('pf-workModes', pfList(o.workModes))
+  set('pf-languages', pfList(p.languages))
+}
+function collectProfile() {
+  const p = content.profile || {}
+  const val = id => document.getElementById(id).value.trim()
+  return {
+    ...p,
+    headline: val('pf-headline'),
+    roles:    pfSplit('pf-roles'),
+    summary:  val('pf-summary'),
+    location: { ...p.location, city: val('pf-city'), region: val('pf-region'), country: val('pf-country'), countryCode: val('pf-countryCode').toUpperCase() },
+    openTo:   { ...p.openTo, status: val('pf-status'), types: pfSplit('pf-types'), from: val('pf-from'), workModes: pfSplit('pf-workModes'), relocation: val('pf-relocation') },
+    languages: pfSplit('pf-languages'),
   }
 }
 
@@ -993,13 +1058,12 @@ function collectList(listId, itemClass) {
       else if (f === 'tags')         obj[f] = el.value.split(',').map(t=>t.trim()).filter(Boolean)
       else                            obj[f] = el.value
     })
-    // Preserve id field
+    // Keep every field the form has no input for (id, url, imageLight, logoPlate, ...),
+    // taken from the same list this card belongs to.
+    const source = { 'exp-list': 'experience', 'proj-list': 'projects', 'res-list': 'research', 'blog-list': 'blogs' }[listId]
     const idx = parseInt(card.dataset.idx)
-    if (!isNaN(idx)) {
-      const orig = (content.experience||content.projects||content.research||content.blogs||[])[idx]
-      if (orig?.id) obj.id = orig.id
-    }
-    return obj
+    const orig = !isNaN(idx) ? (content[source] || [])[idx] : null
+    return orig ? { ...orig, ...obj } : obj
   })
 }
 

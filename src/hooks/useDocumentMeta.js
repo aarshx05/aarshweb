@@ -1,64 +1,31 @@
 import { useEffect } from 'react'
+import { buildJsonLd, headTags } from '../lib/profile'
 
-const SITE_URL = 'https://aarshc.me/'
-
-function setMeta(name, value, attr = 'name') {
-  if (!value) return
-  let el = document.querySelector(`meta[${attr}="${name}"]`)
+function setMeta({ name, property, content }) {
+  const attr = name ? 'name' : 'property'
+  const key = name || property
+  let el = document.querySelector(`meta[${attr}="${key}"]`)
   if (!el) {
     el = document.createElement('meta')
-    el.setAttribute(attr, name)
+    el.setAttribute(attr, key)
     document.head.appendChild(el)
   }
-  el.setAttribute('content', value)
+  el.setAttribute('content', content)
 }
 
 /**
- * Keeps <title>, the social meta tags and Person structured data in sync with
- * content.json, so editing the site through /admin also updates what search
- * engines and link previews see.
+ * Keeps <title>, the meta tags and the schema.org JSON-LD in step with the
+ * profile. The production build already bakes the same values into the HTML
+ * (scripts/prerender.mjs, from the same lib/profile.js), so there this is a
+ * no-op; it matters for `npm run dev`, where nothing is prerendered.
  */
-export function useDocumentMeta(content) {
+export function useDocumentMeta(profile) {
   useEffect(() => {
-    if (!content?.seo) return
+    if (!profile) return
 
-    const { title, description, keywords, ogImage } = content.seo
+    const { title, meta } = headTags(profile)
     if (title) document.title = title
-
-    setMeta('description', description)
-    setMeta('keywords', keywords)
-    setMeta('og:title', title, 'property')
-    setMeta('og:description', description, 'property')
-    setMeta('og:image', ogImage, 'property')
-    setMeta('twitter:title', title)
-    setMeta('twitter:description', description)
-    setMeta('twitter:image', ogImage)
-
-    const jobs = Array.isArray(content.experience) ? content.experience : []
-    const socials = Array.isArray(content.contact?.socials) ? content.contact.socials : []
-    const email = socials.find((s) => /email/i.test(s.name))?.handle
-
-    const jsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: content.hero?.name,
-      description,
-      url: SITE_URL,
-      image: content.hero?.image,
-      email: email ? `mailto:${email}` : undefined,
-      jobTitle: jobs[0]?.role,
-      worksFor: jobs[0]?.company
-        ? { '@type': 'Organization', name: jobs[0].company }
-        : undefined,
-      alumniOf: {
-        '@type': 'CollegeOrUniversity',
-        name: 'National Forensic Sciences University',
-      },
-      knowsAbout: (Array.isArray(content.skills) ? content.skills : []).flatMap((c) =>
-        Array.isArray(c.skills) ? c.skills.slice(0, 5) : []
-      ),
-      sameAs: socials.map((s) => s.href).filter((h) => h && !h.startsWith('mailto:')),
-    }
+    meta.forEach(setMeta)
 
     let script = document.getElementById('person-jsonld')
     if (!script) {
@@ -67,6 +34,6 @@ export function useDocumentMeta(content) {
       script.type = 'application/ld+json'
       document.head.appendChild(script)
     }
-    script.textContent = JSON.stringify(jsonLd)
-  }, [content])
+    script.textContent = JSON.stringify(buildJsonLd(profile))
+  }, [profile])
 }

@@ -31,6 +31,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history, so the build can date "last updated" from content.json's last commit
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -41,16 +43,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # prerender prints the résumé page to PDF with the Chrome that ships on the runner.
       - name: Build (vite build + prerender)
         run: npm run build
 
       # Catch a broken build before it goes live.
       - name: Verify build output
         run: |
-          for f in index.html content.json robots.txt sitemap.xml llms.txt 404.html CNAME; do
-            test -f "dist/$f" || { echo "::error::dist/$f missing"; exit 1; }
+          for f in index.html content.json robots.txt sitemap.xml llms.txt llms-full.txt resume.json resume/index.html og.png 404.html CNAME; do
+            test -s "dist/$f" || { echo "::error::dist/$f missing or empty"; exit 1; }
           done
           grep -q 'class="prerendered"' dist/index.html || { echo "::error::prerendered content missing from index.html"; exit 1; }
+          # The structured data has to be valid JSON, or search engines ignore all of it.
+          node -e '
+            const html = require("fs").readFileSync("dist/index.html", "utf8")
+            const m = html.match(/<script type="application\/ld\+json" id="person-jsonld">([\s\S]*?)<\/script>/)
+            if (!m) { console.log("::error::JSON-LD missing from index.html"); process.exit(1) }
+            const types = JSON.parse(m[1])["@graph"].map((n) => n["@type"])
+            if (!types.includes("Person")) { console.log("::error::JSON-LD has no Person"); process.exit(1) }
+            JSON.parse(require("fs").readFileSync("dist/resume.json", "utf8"))
+          '
+          ls dist/*-Resume.pdf >/dev/null 2>&1 || echo "::warning::résumé PDF was not generated (no Chrome on the runner?) — the site is deployed without the PDF links"
           echo "dist/ looks good:"; ls -la dist/
 
       - name: Configure Pages
@@ -71,3 +84,14 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # IndexNow: tells Bing (which also feeds ChatGPT search, Copilot and DuckDuckGo), Yandex, Naver
+      # and Seznam that these pages changed, so they recrawl now instead of whenever they next come by.
+      # The key is public by design: it is the file public/c0e82f14ac3e536ae92be53df090e5c8.txt, which proves the ping is from this site.
+      - name: Ping search engines (IndexNow)
+        continue-on-error: true
+        run: |
+          curl -sS -m 30 -o /dev/null -w "IndexNow: HTTP %{http_code}\n" \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            -d '{"host":"aarshc.me","key":"c0e82f14ac3e536ae92be53df090e5c8","keyLocation":"https://aarshc.me/c0e82f14ac3e536ae92be53df090e5c8.txt","urlList":["https://aarshc.me/","https://aarshc.me/resume/","https://aarshc.me/llms.txt","https://aarshc.me/llms-full.txt"]}' \
+            https://api.indexnow.org/indexnow

@@ -10,6 +10,7 @@ import Skills from './sections/Skills'
 import Achievements from './sections/Achievements'
 import Blogs from './sections/Blogs'
 import Contact from './sections/Contact'
+import { useMemo } from 'react'
 import { ContentProvider } from './context/ContentContext'
 import { useContent } from './hooks/useContent'
 import { useReveal } from './hooks/useReveal'
@@ -17,6 +18,7 @@ import { useTheme } from './hooks/useTheme'
 import { useActiveSection } from './hooks/useActiveSection'
 import { useDocumentMeta } from './hooks/useDocumentMeta'
 import { SECTIONS, findSocial } from './lib/sections'
+import { buildProfile } from './lib/profile'
 
 const SECTION_IDS = SECTIONS.map((s) => s.id)
 
@@ -25,7 +27,15 @@ export default function App() {
   const { theme, toggle } = useTheme()
   const ready = !loading && !!content
 
-  useDocumentMeta(content)
+  // The recruiter-facing facts (role, availability, résumé links). The build
+  // stamps the two values it alone knows onto <html>.
+  const profile = useMemo(() => {
+    if (!content) return null
+    const { updated = '', resumePdf = '' } = document.documentElement.dataset
+    return buildProfile(content, { updated, resumePdf })
+  }, [content])
+
+  useDocumentMeta(profile)
   useReveal(ready)
   const activeId = useActiveSection(SECTION_IDS, ready)
 
@@ -58,7 +68,7 @@ export default function App() {
       <TopBar name={hero.name} email={email} />
 
       <main id="main">
-        <Hero data={hero} contact={contact} />
+        <Hero data={hero} contact={contact} profile={profile} />
         <Marquee items={content.ticker} />
         <About data={about} heroImage={hero.image} name={hero.name} />
         <Experience data={content.experience} />
@@ -67,10 +77,10 @@ export default function App() {
         <Skills data={content.skills} />
         <Achievements data={content.achievements} />
         <Blogs data={content.blogs} mediumHref={medium} />
-        <Contact data={contact} />
+        <Contact data={contact} profile={profile} />
       </main>
 
-      <Footer content={content} />
+      <Footer content={content} profile={profile} />
       <Dock activeId={activeId} theme={theme} onToggleTheme={toggle} />
     </ContentProvider>
   )

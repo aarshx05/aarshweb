@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import Mobius from '../components/Mobius'
 import { ArrowDown, ArrowUpRight } from '../components/Icons'
 import { findSocial } from '../lib/sections'
@@ -10,7 +11,7 @@ function titleLines(tagline) {
   return [words.join(' '), last]
 }
 
-export default function Hero({ data, contact }) {
+export default function Hero({ data, contact, profile }) {
   const lines = titleLines(data.tagline || 'curious by default.')
   const email = findSocial(contact, /email/i)?.handle
   const badges = data.cardBadges || []
@@ -29,14 +30,21 @@ export default function Hero({ data, contact }) {
           </p>
 
           <h1 id="hero-title" className="hero-title">
-            <span className="sr-only">{data.name} — </span>
+            <span className="sr-only">
+              {data.name}
+              {profile?.headline ? `, ${profile.headline}` : ''} —{' '}
+            </span>
             {lines.map((l, i) => (
-              <span className="line" key={l} aria-hidden="true">
-                <span style={{ '--i': i }}>
-                  {l}
-                  {i === lines.length - 1 && <span className="dot">.</span>}
+              <Fragment key={l}>
+                {/* a real space between the lines, so the heading reads "curious by default" as text */}
+                {i > 0 && ' '}
+                <span className="line" aria-hidden="true">
+                  <span style={{ '--i': i }}>
+                    {l}
+                    {i === lines.length - 1 && <span className="dot">.</span>}
+                  </span>
                 </span>
-              </span>
+              </Fragment>
             ))}
           </h1>
 
@@ -57,6 +65,9 @@ export default function Hero({ data, contact }) {
             )}
             <a className="btn" href="#work">
               See The Work <ArrowDown />
+            </a>
+            <a className="btn" href="/resume/">
+              Résumé <ArrowUpRight />
             </a>
           </div>
         </div>

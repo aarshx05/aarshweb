@@ -24,7 +24,7 @@ export default function About({ data, heroImage, name }) {
         )}
 
         {data.highlights?.length > 0 && (
-          <dl className="bento-facts">
+          <dl className={`bento-facts${data.highlights.length % 3 === 0 ? ' is-3' : ''}`}>
             {data.highlights.map((h) => {
               // A trailing "· CGPA …" is kept, but as a quiet footnote rather than part of the headline fact.
               const m = String(h.value).match(/^(.*?)\s*·\s*(CGPA.*)$/i)

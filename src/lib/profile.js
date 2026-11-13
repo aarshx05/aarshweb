@@ -129,9 +129,11 @@ export function buildProfile(content = {}, { updated = '', resumePdf = '' } = {}
     links,
     location: { ...loc, text: locationText },
     languages: arr(p.languages),
+    // The roles this background fits and should be found for. Stated as fact;
+    // whether Aarsh is *looking* is a separate, opt-in statement (openTo).
+    roles: arr(p.roles),
     openTo: {
       active: open.status === 'open',
-      roles: arr(open.roles),
       types: arr(open.types),
       from: open.from || '',
       workModes: arr(open.workModes),
@@ -193,7 +195,7 @@ export function openToLine(profile) {
   const o = profile.openTo
   if (!o.active) return ''
   const types = o.types.length ? o.types.join(' / ').toLowerCase() + ' ' : ''
-  const roles = o.roles.length ? o.roles.slice(0, 3).join(', ') + ' roles' : 'roles'
+  const roles = profile.roles.length ? profile.roles.slice(0, 3).join(', ') + ' roles' : 'roles'
   return `Open to ${types}${roles}${o.from ? ` from ${o.from}` : ''}`
 }
 
@@ -216,7 +218,7 @@ export function quickFacts(profile) {
   const o = profile.openTo
   const edu = profile.education[0]
   return [
-    o.active && o.roles.length ? ['Looking for', o.roles.join(' · ')] : ['Role', profile.headline],
+    [o.active ? 'Looking for' : 'Roles', profile.roles.join(' · ') || profile.headline],
     ['Available', o.active ? [o.types.join(' / '), o.from && `from ${o.from}`].filter(Boolean).join(', ') : ''],
     ['Based in', profile.location.text],
     ['Work mode', o.active ? [o.workModes.join(' / '), o.relocation].filter(Boolean).join(' · ') : ''],
@@ -354,16 +356,17 @@ export function buildJsonLd(profile) {
       image: profile.image,
       description: profile.summary,
       email: profile.email ? `mailto:${profile.email}` : undefined,
-      jobTitle: profile.headline || profile.current?.role,
+      // The title actually held; the roles this profile fits are under hasOccupation.
+      jobTitle: profile.current?.role || profile.headline,
       worksFor: profile.jobs.filter((j) => j.current).map((j) => roleNode(j, 'worksFor')),
       alumniOf: [...edu, ...profile.jobs.filter((j) => !j.current).map((j) => roleNode(j, 'alumniOf'))],
-      hasOccupation: {
+      hasOccupation: (profile.roles.length ? profile.roles : [profile.headline || profile.current?.role]).map((role, i) => ({
         '@type': 'Occupation',
-        name: profile.headline || profile.current?.role,
+        name: role,
         occupationalCategory: '15-1212.00', // O*NET-SOC: Information Security Analysts
         occupationLocation: profile.location.country ? { '@type': 'Country', name: profile.location.country } : undefined,
-        skills: skills.join(', '),
-      },
+        skills: i === 0 ? skills.join(', ') : undefined,
+      })),
       hasCredential: credentials,
       knowsAbout: skills,
       knowsLanguage: profile.languages,

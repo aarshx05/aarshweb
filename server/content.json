@@ -1,8 +1,8 @@
 {
   "seo": {
     "title": "Aarsh Chaurasia | AI Security Engineer & Researcher",
-    "description": "Aarsh Chaurasia is an AI Security Engineer working on agentic AI and MCP security, AI red teaming, AppSec and DevSecOps. Vaatun, previously Microsoft and we45. Founder of Okynus Tech.",
-    "keywords": "Aarsh Chaurasia, AI Security Engineer, Agentic AI Security, MCP Security, AI Red Teaming, LLM Security, Cybersecurity Researcher, DevSecOps, Application Security, Microsoft, Vaatun, we45, Okynus Tech, Portfolio",
+    "description": "Aarsh Chaurasia is an AI Security Engineer and researcher: agentic AI and MCP security, AI red teaming, product security and DevSecOps. Vaatun, previously Microsoft and we45. Founder of Okynus Tech.",
+    "keywords": "Aarsh Chaurasia, AI Security Engineer, Product Security Engineer, Application Security Engineer, Security Researcher, Agentic AI Security, MCP Security, AI Red Teaming, LLM Security, Cybersecurity Researcher, DevSecOps, Application Security, Microsoft, Vaatun, we45, Okynus Tech, Portfolio",
     "ogImage": "/og.png",
     "ogImageAlt": "Aarsh Chaurasia — AI Security Engineer. Agentic AI security, MCP security, AI red teaming.",
     "verification": {
@@ -12,7 +12,13 @@
   },
   "profile": {
     "headline": "AI Security Engineer",
-    "summary": "Aarsh Chaurasia is an AI security engineer working on agentic AI security, MCP security and AI red teaming, with a foundation in application security and DevSecOps. He is a Founding Security Engineer Intern at Vaatun. Previously he built an AI-driven security testing platform for internal MCP servers at Microsoft (Azure DevSec), worked on product security at we45, and founded Okynus Tech, a security company incubated at C3iHub, IIT Kanpur. He is completing an integrated B.Tech–M.Tech in Computer Science (Cyber Security) at National Forensic Sciences University (2022–2027, CGPA 9.30/10).",
+    "roles": [
+      "AI Security Engineer",
+      "Product Security Engineer",
+      "Application Security Engineer",
+      "Security Researcher"
+    ],
+    "summary": "Aarsh Chaurasia is an AI security engineer and researcher working on agentic AI security, MCP security and AI red teaming, with a foundation in product security, application security and DevSecOps. He is a Founding Security Engineer Intern at Vaatun. Previously he built an AI-driven security testing platform for internal MCP servers at Microsoft (Azure DevSec), worked on product security at we45, and founded Okynus Tech, a security company incubated at C3iHub, IIT Kanpur. He is completing an integrated B.Tech–M.Tech in Computer Science (Cyber Security) at National Forensic Sciences University (2022–2027, CGPA 9.30/10).",
     "location": {
       "city": "",
       "region": "",
@@ -21,11 +27,6 @@
     },
     "openTo": {
       "status": "",
-      "roles": [
-        "AI Security Engineer",
-        "Product Security Engineer",
-        "Application Security Engineer"
-      ],
       "types": [],
       "from": "",
       "workModes": [],

@@ -345,7 +345,7 @@
           </div>
           <div class="form-group"><label>Available from (e.g. July 2027)</label><input id="pf-from" /></div>
         </div>
-        <div class="form-group"><label>Roles you want (comma-separated)</label><input id="pf-roles" /></div>
+        <div class="form-group"><label>Roles you want to be found for (comma-separated; shown as "Roles", or "Looking for" when status is open)</label><input id="pf-roles" /></div>
         <div class="form-row">
           <div class="form-group"><label>Employment types (comma-separated, e.g. Full-time)</label><input id="pf-types" /></div>
           <div class="form-group"><label>Work modes (comma-separated, e.g. Remote, Hybrid, On-site)</label><input id="pf-workModes" /></div>
@@ -890,7 +890,7 @@ function renderProfile() {
   set('pf-headline', p.headline); set('pf-summary', p.summary)
   set('pf-city', loc.city); set('pf-region', loc.region); set('pf-country', loc.country); set('pf-countryCode', loc.countryCode)
   set('pf-status', o.status); set('pf-from', o.from); set('pf-relocation', o.relocation)
-  set('pf-roles', pfList(o.roles)); set('pf-types', pfList(o.types)); set('pf-workModes', pfList(o.workModes))
+  set('pf-roles', pfList(p.roles)); set('pf-types', pfList(o.types)); set('pf-workModes', pfList(o.workModes))
   set('pf-languages', pfList(p.languages))
 }
 function collectProfile() {
@@ -899,9 +899,10 @@ function collectProfile() {
   return {
     ...p,
     headline: val('pf-headline'),
+    roles:    pfSplit('pf-roles'),
     summary:  val('pf-summary'),
     location: { ...p.location, city: val('pf-city'), region: val('pf-region'), country: val('pf-country'), countryCode: val('pf-countryCode').toUpperCase() },
-    openTo:   { ...p.openTo, status: val('pf-status'), roles: pfSplit('pf-roles'), types: pfSplit('pf-types'), from: val('pf-from'), workModes: pfSplit('pf-workModes'), relocation: val('pf-relocation') },
+    openTo:   { ...p.openTo, status: val('pf-status'), types: pfSplit('pf-types'), from: val('pf-from'), workModes: pfSplit('pf-workModes'), relocation: val('pf-relocation') },
     languages: pfSplit('pf-languages'),
   }
 }

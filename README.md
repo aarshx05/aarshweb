@@ -88,10 +88,11 @@ Edit `public/content.json` and push. The parts that decide how you are found:
 | Key | What it controls |
 |---|---|
 | `seo.title`, `seo.description` | The search result and link preview. Keep the description near 160 characters. |
-| `profile.headline` | The one role you want to be found for. Used in structured data, the résumé and `llms.txt`. |
+| `profile.headline` | The one-line label under your name on the résumé, share card and `llms.txt`. |
+| `profile.roles` | The roles you want to be found for. Shown as "Roles" and published as schema.org occupations. |
 | `profile.summary` | Two to four sentences in the third person. **Update it when your job changes.** |
 | `profile.location` | City / region / country. Recruiters filter on this first. |
-| `profile.openTo` | `status: "open"` publishes that you are looking, with `roles`, `types`, `from`, `workModes`, `relocation`. Set `status` to `""` to stop saying so. |
+| `profile.openTo` | Off by default. `status: "open"` publishes that you are looking ("Looking for …", plus `types`, `from`, `workModes`, `relocation`) across the page, résumé, `llms.txt` and structured data. `""` says nothing about availability. |
 | `profile.education` | Degree, institution, years, grade. |
 | `achievements.certifications[].date` | A date of "Preparing" / "In progress" keeps that certificate out of the structured data and marks it "in progress" everywhere else. |
 

@@ -14,7 +14,7 @@ npm run dev          # http://localhost:5173
 
 ```bash
 npm run build        # vite build + scripts/prerender.mjs  ->  dist/
-npm run preview      # http://localhost:4173  (the résumé page and the files below only exist after a build)
+npm run preview      # http://localhost:4173  (the files below only exist after a build)
 ```
 
 ## What the build publishes
@@ -22,28 +22,16 @@ npm run preview      # http://localhost:4173  (the résumé page and the files b
 The React app renders in the browser, so on its own the HTML would be an empty `<div>` to anything that
 does not run JavaScript: AI crawlers (GPTBot, ClaudeBot, PerplexityBot), recruiter-sourcing scrapers, link
 previewers. `scripts/prerender.mjs` runs after the Vite build and writes the same profile, from the same
-`content.json`, in every form a search engine, an AI assistant or a recruiter is likely to ask for:
+`content.json`, in the forms a search engine or an AI assistant reads:
 
 | File | For |
 |---|---|
 | `index.html` | Full profile as plain HTML inside `#root` (React replaces it on load), meta + Open Graph tags, schema.org JSON-LD (`WebSite` → `ProfilePage` → `Person`, plus projects, papers and articles) |
-| `resume/index.html` | Static, printable résumé at `/resume/` with every role on one page |
-| `Aarsh-Chaurasia-Resume.pdf` | That page printed by headless Chrome (two pages, real text, parser-friendly reading order) |
-| `resume.json` | The same data in the [JSON Resume](https://jsonresume.org/schema) schema |
 | `llms.txt`, `llms-full.txt` | A short brief and the complete profile in Markdown, for AI assistants |
 | `robots.txt`, `sitemap.xml`, `404.html` | Crawlers (everyone is allowed, AI crawlers included) |
 
 `src/lib/profile.js` is the single place that turns `content.json` into those facts. The build and the React
 app both import it, so the page, the structured data and the files above cannot drift apart.
-
-### The résumé PDF
-
-- Generated when a Chrome/Chromium binary is available: on PATH (`google-chrome`, `chromium`), or via
-  `CHROME_PATH=/path/to/chrome npm run build`. GitHub's runners ship with Chrome, so deploys include it.
-  Without Chrome the build still succeeds and the pages simply do not link to a PDF.
-- **To use your own PDF instead**, save it as `public/Aarsh-Chaurasia-Resume.pdf`. The build then leaves it alone.
-- The four most recent roles print in full; earlier ones print as one line each (the web page shows everything).
-  Change the number with `"resumeFullRoles"` under `"profile"` in `content.json`.
 
 ### The share card
 
@@ -88,11 +76,11 @@ Edit `public/content.json` and push. The parts that decide how you are found:
 | Key | What it controls |
 |---|---|
 | `seo.title`, `seo.description` | The search result and link preview. Keep the description near 160 characters. |
-| `profile.headline` | The one-line label under your name on the résumé, share card and `llms.txt`. |
+| `profile.headline` | The one-line label under your name on the share card and in `llms.txt`. |
 | `profile.roles` | The roles you want to be found for. Shown as "Roles" and published as schema.org occupations. |
 | `profile.summary` | Two to four sentences in the third person. **Update it when your job changes.** |
 | `profile.location` | City / region / country. Recruiters filter on this first. |
-| `profile.openTo` | Off by default. `status: "open"` publishes that you are looking ("Looking for …", plus `types`, `from`, `workModes`, `relocation`) across the page, résumé, `llms.txt` and structured data. `""` says nothing about availability. |
+| `profile.openTo` | Off by default. `status: "open"` publishes that you are looking ("Looking for …", plus `types`, `from`, `workModes`, `relocation`) across the page, `llms.txt` and structured data. `""` says nothing about availability. |
 | `profile.education` | Degree, institution, years, grade. |
 | `achievements.certifications[].date` | A date of "Preparing" / "In progress" keeps that certificate out of the structured data and marks it "in progress" everywhere else. |
 

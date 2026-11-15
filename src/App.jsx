@@ -27,12 +27,12 @@ export default function App() {
   const { theme, toggle } = useTheme()
   const ready = !loading && !!content
 
-  // The recruiter-facing facts (role, availability, résumé links). The build
+  // The recruiter-facing facts (roles, location, education). The build
   // stamps the two values it alone knows onto <html>.
   const profile = useMemo(() => {
     if (!content) return null
-    const { updated = '', resumePdf = '' } = document.documentElement.dataset
-    return buildProfile(content, { updated, resumePdf })
+    const { updated = '' } = document.documentElement.dataset
+    return buildProfile(content, { updated })
   }, [content])
 
   useDocumentMeta(profile)

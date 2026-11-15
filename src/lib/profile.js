@@ -1,7 +1,7 @@
 /**
  * profile.js — one normalised view of content.json for everything that
  * describes Aarsh to a machine or a recruiter: <head> meta, schema.org JSON-LD,
- * the résumé page, resume.json, llms.txt.
+ * llms.txt and llms-full.txt.
  *
  * Pure functions, no DOM and no Node APIs, so the same code runs in the browser
  * (useDocumentMeta) and in the build (scripts/prerender.mjs). That is what keeps
@@ -65,7 +65,7 @@ const IN_PROGRESS = /prepar|progress|pursuing|upcoming|planned/i
  * Everything downstream reads this, never content.json directly.
  * `updated` is an ISO date (yyyy-mm-dd) for "last updated" / dateModified.
  */
-export function buildProfile(content = {}, { updated = '', resumePdf = '' } = {}) {
+export function buildProfile(content = {}, { updated = '' } = {}) {
   const hero = content.hero || {}
   const about = content.about || {}
   const seo = content.seo || {}
@@ -181,12 +181,6 @@ export function buildProfile(content = {}, { updated = '', resumePdf = '' } = {}
         desc: stripTags(String(b.desc || '').split(/\n{2,}/)[0]),
       }))
       .sort((x, y) => (y.iso || '').localeCompare(x.iso || '')),
-    resume: {
-      html: `${SITE}/resume/`,
-      pdf: resumePdf ? abs(resumePdf) : '',
-      json: `${SITE}/resume.json`,
-      markdown: `${SITE}/llms-full.txt`,
-    },
   }
 }
 
@@ -264,7 +258,6 @@ export function headTags(profile, { path = '/', title, description, type = 'prof
     { rel: 'canonical', href: url },
     // Machine-readable versions of the same profile, for agents that look for them.
     { rel: 'alternate', type: 'text/markdown', title: 'Profile (Markdown, for AI assistants)', href: `${profile.site}/llms-full.txt` },
-    { rel: 'alternate', type: 'application/json', title: 'Résumé (JSON Resume)', href: profile.resume.json },
     // rel="me" ties this site to the same person's other profiles.
     ...profile.links.map((l) => ({ rel: 'me', href: l.url })),
   ]
@@ -340,9 +333,6 @@ export function buildJsonLd(profile) {
       mainEntity: person,
       dateModified: profile.updated,
       primaryImageOfPage: profile.ogImage,
-      hasPart: [
-        { '@type': 'WebPage', '@id': profile.resume.html, url: profile.resume.html, name: `${profile.name} — Résumé` },
-      ],
     },
     {
       '@type': 'Person',

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/prerender.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "og": "node scripts/og-card.mjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

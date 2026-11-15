@@ -1,6 +1,6 @@
 import Section from '../components/Section'
 import Dots from '../components/Dots'
-import { ArrowDown, ArrowUpRight } from '../components/Icons'
+import { ArrowUpRight } from '../components/Icons'
 import { findSocial } from '../lib/sections'
 import { quickFacts } from '../lib/profile'
 
@@ -10,7 +10,6 @@ export default function Contact({ data, profile }) {
   // Role, availability, location, education: what a recruiter checks first.
   // Facts that are not filled in under "profile" in content.json do not show.
   const facts = profile ? quickFacts(profile) : []
-  const pdf = profile?.resume?.pdf ? new URL(profile.resume.pdf).pathname : ''
 
   return (
     <Section id="contact" tone="accent" meta="Open To Good Problems">
@@ -36,16 +35,6 @@ export default function Contact({ data, profile }) {
               </div>
             ))}
           </dl>
-          <div className="hire-actions">
-            <a className="btn btn-inv" href="/resume/">
-              Résumé <ArrowUpRight />
-            </a>
-            {pdf && (
-              <a className="btn" href={pdf} download>
-                Download PDF <ArrowDown />
-              </a>
-            )}
-          </div>
         </div>
       )}
 

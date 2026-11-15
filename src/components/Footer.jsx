@@ -30,9 +30,6 @@ export default function Footer({ content, profile }) {
             </li>
           ))}
           <li>
-            <a href="/resume/">Résumé</a>
-          </li>
-          <li>
             <a href="/llms.txt" title="A plain-text brief of this profile for AI assistants">
               llms.txt
             </a>

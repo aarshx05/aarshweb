@@ -66,9 +66,6 @@ export default function Hero({ data, contact, profile }) {
             <a className="btn" href="#work">
               See The Work <ArrowDown />
             </a>
-            <a className="btn" href="/resume/">
-              Résumé <ArrowUpRight />
-            </a>
           </div>
         </div>
       </div>

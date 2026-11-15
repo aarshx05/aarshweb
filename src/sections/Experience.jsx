@@ -2,7 +2,6 @@ import { useRef, useState } from 'react'
 import Section from '../components/Section'
 import Dots from '../components/Dots'
 import LogoMark from '../components/LogoMark'
-import { ArrowUpRight } from '../components/Icons'
 import { isCurrent, parseDescription } from '../lib/content'
 
 /**
@@ -109,10 +108,6 @@ export default function Experience({ data }) {
           })}
         </div>
       </div>
-
-      <a className="more-link reveal" href="/resume/">
-        Every Role On One Page <ArrowUpRight />
-      </a>
     </Section>
   )
 }
